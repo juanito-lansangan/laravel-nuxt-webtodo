@@ -91,15 +91,15 @@ test('sorting tasks by due date receive 200 response with array of sorted tasks'
     $userWithSession = User::factory()->create();
 
     $task1 = Task::factory()->create([
-        'due_date' => now()->addDays(2)->format('Y-m-d')
+        'due_date' => '2022-01-10'
     ]);
 
     $task2 = Task::factory()->create([
-        'due_date' => now()->addDays(1)->format('Y-m-d')
+        'due_date' => '2025-01-10'
     ]);
 
     $task3 = Task::factory()->create([
-        'due_date' => now()->addDays(3)->format('Y-m-d')
+        'due_date' => '2025-01-04'
     ]);
 
     $userWithSession->tasks()->saveMany([$task1, $task2, $task3]);
@@ -123,10 +123,10 @@ test('sorting tasks by due date receive 200 response with array of sorted tasks'
     $second = Carbon::parse($sortedTasks[1]['due_date'])->format('Y-m-d');
     $third = Carbon::parse($sortedTasks[2]['due_date'])->format('Y-m-d');
 
-    // should be descending order of description
-    expect($first)->toBe('2025-01-12');
-    expect($second)->toBe('2025-01-11');
-    expect($third)->toBe('2025-01-10');
+    // should be descending order of due date
+    expect($first)->toBe('2025-01-10');
+    expect($second)->toBe('2025-01-04');
+    expect($third)->toBe('2022-01-10');
 
     $response->assertStatus(200);
 });
@@ -135,15 +135,15 @@ test('sorting tasks by created date receive 200 response with array of sorted ta
     $userWithSession = User::factory()->create();
 
     $task1 = Task::factory()->create([
-        'created_at' => now()->addDays(2)->format('Y-m-d')
+        'created_at' => '2025-01-11'
     ]);
 
     $task2 = Task::factory()->create([
-        'created_at' => now()->addDays(1)->format('Y-m-d')
+        'created_at' => '2025-01-10'
     ]);
 
     $task3 = Task::factory()->create([
-        'created_at' => now()->addDays(3)->format('Y-m-d')
+        'created_at' => '2025-01-12'
     ]);
 
     $userWithSession->tasks()->saveMany([$task1, $task2, $task3]);
@@ -163,11 +163,12 @@ test('sorting tasks by created date receive 200 response with array of sorted ta
     ->getJson("/api/tasks?sort_by=created_at&sort_order=desc");
     
     $sortedTasks = $response->json('data');
+    // dd($sortedTasks);
     $first = Carbon::parse($sortedTasks[0]['created_at'])->format('Y-m-d');
     $second = Carbon::parse($sortedTasks[1]['created_at'])->format('Y-m-d');
     $third = Carbon::parse($sortedTasks[2]['created_at'])->format('Y-m-d');
 
-    // should be descending order of description
+    // should be descending order of created at
     expect($first)->toBe('2025-01-12');
     expect($second)->toBe('2025-01-11');
     expect($third)->toBe('2025-01-10');
@@ -179,15 +180,15 @@ test('sorting tasks by completed date receive 200 response with array of sorted 
     $userWithSession = User::factory()->create();
 
     $task1 = Task::factory()->create([
-        'completed_at' => now()->addDays(2)->format('Y-m-d')
+        'completed_at' => '2024-10-26'
     ]);
 
     $task2 = Task::factory()->create([
-        'completed_at' => now()->addDays(1)->format('Y-m-d')
+        'completed_at' => '2025-01-10'
     ]);
 
     $task3 = Task::factory()->create([
-        'completed_at' => now()->addDays(3)->format('Y-m-d')
+        'completed_at' => '2024-12-26'
     ]);
 
     $userWithSession->tasks()->saveMany([$task1, $task2, $task3]);
@@ -212,10 +213,10 @@ test('sorting tasks by completed date receive 200 response with array of sorted 
     $second = Carbon::parse($sortedTasks[1]['completed_at'])->format('Y-m-d');
     $third = Carbon::parse($sortedTasks[2]['completed_at'])->format('Y-m-d');
 
-    // should be descending order of description
-    expect($first)->toBe('2025-01-12');
-    expect($second)->toBe('2025-01-11');
-    expect($third)->toBe('2025-01-10');
+    // should be descending order of completed at
+    expect($first)->toBe('2025-01-10');
+    expect($second)->toBe('2024-12-26');
+    expect($third)->toBe('2024-10-26');
 
     $response->assertStatus(200);
 });
@@ -262,11 +263,11 @@ test('sorting tasks by priority level receive 200 response with array of sorted 
     $third = $sortedTasks[2]['priority'];
     $fourth = $sortedTasks[3]['priority'];
 
-    // should be descending order of description
-    expect($first)->toBe(4);
-    expect($second)->toBe(3);
-    expect($third)->toBe(2);
-    expect($fourth)->toBe(1);
+    // should be descending order of priority level
+    expect($first)->toBe(TaskPriority::Urgent->value);
+    expect($second)->toBe(TaskPriority::High->value);
+    expect($third)->toBe(TaskPriority::Normal->value);
+    expect($fourth)->toBe(TaskPriority::Low->value);
 
     $response->assertStatus(200);
 });

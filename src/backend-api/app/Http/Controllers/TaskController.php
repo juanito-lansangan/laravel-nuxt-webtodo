@@ -43,16 +43,16 @@ class TaskController extends Controller
                 ->whereDate('due_date', '<=', $request->due_date_to);
 
         })
-        ->when($request->completed_date_from && $request->completed_date_to, function($query) use ($request) {
+        ->when($request->completed_at_from && $request->completed_at_to, function($query) use ($request) {
             $query
-                ->whereDate('completed_date', '>=', $request->completed_date_from)
-                ->whereDate('completed_date', '<=', $request->completed_date_to);
+                ->whereDate('completed_at', '>=', $request->completed_at_from)
+                ->whereDate('completed_at', '<=', $request->completed_at_to);
 
         })
-        ->when($request->archived_date_from && $request->archived_date_to, function($query) use ($request) {
+        ->when($request->archived_at_from && $request->archived_at_to, function($query) use ($request) {
             $query
-                ->whereDate('archived_date', '>=', $request->archived_date_from)
-                ->whereDate('archived_date', '<=', $request->archived_date_to);
+                ->whereDate('archived_at', '>=', $request->archived_at_from)
+                ->whereDate('archived_at', '<=', $request->archived_at_to);
 
         })
         ->when($request->sort_by && in_array($request->sort_by, array_keys($sortItems)), function($query) use ($request) {
