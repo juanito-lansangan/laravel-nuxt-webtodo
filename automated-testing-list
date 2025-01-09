@@ -96,3 +96,26 @@ completed, I want to receive a 404 response.
 
 ✅ When marking a task I do not own as
 completed, I want to receive a 401 response.
+
+[Authenticated User Mark a Task as incomplete]
+✅ When marking a task as incomplete, I want to
+receive a 200 response with the updated task
+data.
+✅ Date completed is set to NULL.
+✅ When marking a task I do not own as
+incomplete, I want to receive a 401 response.
+
+[Authenticated User add due date]
+✅ When adding a valid due date to a task, I want
+to receive a 200 response with the updated
+task data.
+✅ Due date is optional.
+✅ Date format must be “YYYY-MM-DD”
+.
+✅ When set, the due date must be equal
+or greater than the current date.
+✅ When adding an invalid due date to a task, I
+want to receive a 422 response with error
+messages.
+✅ When adding a due date to a non-existent
+task, I want to receive a 404 response.

@@ -27,9 +27,9 @@ class UpdateTaskRequest extends FormRequest
             'title' => ['required', 'min:3', 'max:255'],
             'description' => ['required', 'min:3'],
             'priority' => [Rule::enum(TaskPriority::class)],
-            'due_date' => ['nullable', 'date', 'date_format:Y-m-d'],
-            'archived_date' => ['nullable', 'date', 'date_format:Y-m-d'],
-            'completed_date' => ['nullable', 'date', 'date_format:Y-m-d'],
+            'due_date' => ['nullable', 'date', 'date_format:Y-m-d', 'after_or_equal:today'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['integer', 'exists:tags,id'],
         ];
     }
 }

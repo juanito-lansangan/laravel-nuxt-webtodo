@@ -12,6 +12,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('tasks', TaskController::class);
     Route::patch('/tasks/{task}/complete', [TaskController::class, 'complete'])->name('task.complete');
+    Route::patch('/tasks/{task}/incomplete', [TaskController::class, 'incomplete'])->name('task.incomplete');
 
     // Route::get('/tags', [TagController::class, 'index']);
     // Route::post('/tags', [TagController::class, 'store']);

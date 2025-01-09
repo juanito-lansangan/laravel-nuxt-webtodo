@@ -123,5 +123,15 @@ class TaskController extends Controller
 
         return response()->json($task, 200);
     }
+
+    public function incomplete(Task $task): JsonResponse
+    {
+        Gate::authorize('viewOrModify', $task);
+
+        $task->completed_at = null;
+        $task->save();
+
+        return response()->json($task, 200);
+    }
     
 }

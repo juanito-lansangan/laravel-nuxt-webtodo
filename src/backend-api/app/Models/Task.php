@@ -25,9 +25,9 @@ class Task extends Model
     {
         return [
             'priority' => TaskPriority::class,
-            // 'due_date' => 'datetime',
-            // 'archived_date' => 'datetime',
-            // 'completed_date' => 'datetime',
+            'due_date' => 'datetime',
+            'archived_date' => 'datetime',
+            'completed_date' => 'datetime',
         ];
     }
 
