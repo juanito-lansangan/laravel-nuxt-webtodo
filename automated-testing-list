@@ -190,3 +190,11 @@ response with the updated task data.
 ✅ Archived date must be a timestamp.
 ✅ When archiving a task I do not own, I want to
 receive a 401 response.
+
+✅ When restoring a task, I want to receive a 200
+response with the updated task data.
+✅ Archived date is set to NULL.
+✅ When restoring a non-existent task, I want to
+receive a 404 response.
+✅ When restoring a task I do not own, I want to
+receive a 401 response.
