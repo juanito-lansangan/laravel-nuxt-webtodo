@@ -1,0 +1,21 @@
+✅ When logging in with an existing email
+address and password, I want to receive a
+200 response with the user data and a token.
+
+✅ When logging in with an invalid email address
+and/or password, I want to receive a 422
+response with error messages.
+
+✅ When logging in with a non-existent email
+address, I want to receive a 404 response.
+
+✅ When signing up with a valid email address
+and password, I want to receive a 200
+response with the user data and a token.
+
+✅ When signing up with an invalid email address
+and password, I want to receive a 422
+response with error messages.
+
+✅ When logged in, I should be able to log out
+and receive a 204 response.
