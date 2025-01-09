@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class TaskController extends Controller
@@ -108,11 +107,21 @@ class TaskController extends Controller
     public function destroy(Task $task): JsonResponse
     {
         Gate::authorize('viewOrModify', $task);
-        
+
         $task->delete();
 
         return response()->json([], 204);
     }
 
+    public function complete(Task $task): JsonResponse
+    {
+        Gate::authorize('viewOrModify', $task);
+
+        $task->update([
+            'completed_at' => now()
+        ]);
+
+        return response()->json($task, 200);
+    }
     
 }

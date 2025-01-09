@@ -83,3 +83,16 @@ response.
 receive a 404 response.
 ✅ When removing a task I do not own, I want to
 receive a 401 response.
+
+[Authenticated User Mark a Task as completed]
+✅ When marking a task as completed, I want to
+receive a 200 response with the updated task
+data.
+✅ Date completed is automatically set to now.
+✅ Date completed must be a timestamp.
+
+✅ When marking a non-existent task as
+completed, I want to receive a 404 response.
+
+✅ When marking a task I do not own as
+completed, I want to receive a 401 response.

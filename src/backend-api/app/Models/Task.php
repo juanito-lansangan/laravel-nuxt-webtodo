@@ -17,17 +17,17 @@ class Task extends Model
         'description',
         'priority',
         'due_date',
-        'archived_date',
-        'completed_date',
+        'archived_at',
+        'completed_at',
     ];
 
     public function casts(): array
     {
         return [
             'priority' => TaskPriority::class,
-            'due_date' => 'datetime',
-            'archived_date' => 'datetime',
-            'completed_date' => 'datetime',
+            // 'due_date' => 'datetime',
+            // 'archived_date' => 'datetime',
+            // 'completed_date' => 'datetime',
         ];
     }
 
