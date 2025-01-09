@@ -18,11 +18,11 @@ test('creating a task as an authenticated user with valid title, description, du
         'priority' => TaskPriority::Urgent
     ]);
 
-    $task = $response->json();
+    $responseTask = $response->json();
 
     $response
         ->assertStatus(200)
-        ->assertJson($task);
+        ->assertJson($responseTask);
 });
 
 test('creating a task as an authenticated user with invalid title and/or description receive 422 response', function() {

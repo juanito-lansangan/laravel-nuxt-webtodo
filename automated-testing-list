@@ -1,3 +1,5 @@
+[Basic Auth]
+
 ✅ When logging in with an existing email
 address and password, I want to receive a
 200 response with the user data and a token.
@@ -19,3 +21,65 @@ response with error messages.
 
 ✅ When logged in, I should be able to log out
 and receive a 204 response.
+
+[Users should be able to manage Tasks]
+
+[Guest User]
+✅ When creating a task, I want to receive a 401
+response.
+
+✅ When updating a task, I want to receive a 401
+response.
+
+✅ When viewing a task, I want to receive a 401
+response.
+
+✅ When deleting a task, I want to receive a 401
+response.
+
+[Authenticated User Creating Task]
+✅ When creating a task with a valid title,
+description, due date, and priority, I want to
+receive a 200 response with the task data.
+
+✅ When creating a task with an invalid title
+and/or description, I want to receive a 422
+response with error messages.
+
+[Authenticated User Viewing Task]
+✅ When viewing a single task, I want to receive
+a 200 response with the task data.
+
+✅ When viewing a non-existent task, I want to
+receive a 404 response.
+
+✅ When viewing all tasks, I want to receive a
+200 response with an array of my tasks or an
+empty array if there are no tasks yet.
+■ Task list must be paginated.
+
+✅ When viewing a task I did not create, I want to
+receive a 401 response.
+
+[Authenticated User Updating Task]
+✅ When editing a task with valid inputs, I want to
+receive a 200 response with the updated task
+data.
+
+✅ When editing a task with invalid inputs, I want
+to receive a 422 response with error
+messages.
+
+✅ When editing a non-existent task, I want to
+receive a 404 response.
+
+✅ When editing a task I do not own, I want to
+receive a 401 response.
+
+[Authenticated User Deleting Task]
+✅ When removing a task, I want to receive a 204
+response.
+✅ When removing a non-existent task, I want to
+receive a 404 response.
+✅ When removing a task I do not own, I want to
+receive a 401 response.

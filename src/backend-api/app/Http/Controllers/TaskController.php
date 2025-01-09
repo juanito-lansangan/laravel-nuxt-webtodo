@@ -93,6 +93,7 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task): JsonResponse
     {
+        Gate::authorize('viewOrModify', $task);
 
         $fields = $request->validated();
         
@@ -106,6 +107,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task): JsonResponse
     {
+        Gate::authorize('viewOrModify', $task);
+        
         $task->delete();
 
         return response()->json([], 204);

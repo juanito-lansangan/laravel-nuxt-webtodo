@@ -17,11 +17,13 @@ test('viewing a single task as an aunthenticated user receive 200', function() {
         ->getJson("/api/tasks/{$task->id}");
 
         // dd($task->due_date?->toISOString());
-    $task = $response->json();
+    $responseTask = $response->json();
 
+    expect($task->id)->toBe($responseTask['id']);
+    
     $response
         ->assertStatus(200)
-        ->assertJson($task);
+        ->assertJson($responseTask);
 });
 
 test('viewing non-existent task as an aunthenticated user receive 404', function() {
