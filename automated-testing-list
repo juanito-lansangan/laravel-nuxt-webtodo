@@ -1,4 +1,5 @@
-[Basic Auth]
+---
+## [Basic Auth]
 
 ✅ When logging in with an existing email
 address and password, I want to receive a
@@ -21,8 +22,9 @@ response with error messages.
 
 ✅ When logged in, I should be able to log out
 and receive a 204 response.
+---
 
-[Users should be able to manage Tasks]
+## [Users should be able to manage Tasks]
 
 [Guest User]
 ✅ When creating a task, I want to receive a 401
@@ -37,7 +39,10 @@ response.
 ✅ When deleting a task, I want to receive a 401
 response.
 
-[Authenticated User Creating Task]
+---
+
+## [Authenticated User Creating Task]
+
 ✅ When creating a task with a valid title,
 description, due date, and priority, I want to
 receive a 200 response with the task data.
@@ -46,7 +51,10 @@ receive a 200 response with the task data.
 and/or description, I want to receive a 422
 response with error messages.
 
-[Authenticated User Viewing Task]
+---
+
+## [Authenticated User Viewing Task]
+
 ✅ When viewing a single task, I want to receive
 a 200 response with the task data.
 
@@ -61,7 +69,10 @@ empty array if there are no tasks yet.
 ✅ When viewing a task I did not create, I want to
 receive a 401 response.
 
-[Authenticated User Updating Task]
+---
+
+## [Authenticated User Updating Task]
+
 ✅ When editing a task with valid inputs, I want to
 receive a 200 response with the updated task
 data.
@@ -76,7 +87,10 @@ receive a 404 response.
 ✅ When editing a task I do not own, I want to
 receive a 401 response.
 
-[Authenticated User Deleting Task]
+---
+
+## [Authenticated User Deleting Task]
+
 ✅ When removing a task, I want to receive a 204
 response.
 ✅ When removing a non-existent task, I want to
@@ -84,7 +98,10 @@ receive a 404 response.
 ✅ When removing a task I do not own, I want to
 receive a 401 response.
 
-[Authenticated User can mark a task as completed]
+---
+
+## [Authenticated User can mark a task as completed]
+
 ✅ When marking a task as completed, I want to
 receive a 200 response with the updated task
 data.
@@ -97,7 +114,10 @@ completed, I want to receive a 404 response.
 ✅ When marking a task I do not own as
 completed, I want to receive a 401 response.
 
-[Authenticated User can mark a task as incomplete]
+---
+
+## [Authenticated User can mark a task as incomplete]
+
 ✅ When marking a task as incomplete, I want to
 receive a 200 response with the updated task
 data.
@@ -106,13 +126,15 @@ data.
 ✅ When marking a task I do not own as
 incomplete, I want to receive a 401 response.
 
-[Authenticated User can add due date]
+---
+
+## [Authenticated User can add due date]
+
 ✅ When adding a valid due date to a task, I want
 to receive a 200 response with the updated
 task data.
 ✅ Due date is optional.
-✅ Date format must be “YYYY-MM-DD”
-.
+✅ Date format must be “YYYY-MM-DD”.
 ✅ When set, the due date must be equal
 or greater than the current date.
 
@@ -123,7 +145,10 @@ messages.
 ✅ When adding a due date to a non-existent
 task, I want to receive a 404 response.
 
-[Authenticated User can sort my tasks]
+---
+
+## [Authenticated User can sort my tasks]
+
 ✅ When sorting tasks, I want to receive a 200
 response with the array of my sorted tasks or
 an empty array if there are no tasks yet.
@@ -135,7 +160,8 @@ DESC?).
 
 ✅ Task list must be paginated.
 
-[Authenticated User can filter my tasks]
+## [Authenticated User can filter my tasks]
+
 ✅ When filtering tasks, I want to receive a 200
 response with the array of my filtered tasks or
 an empty array if there are no tasks yet.
@@ -147,3 +173,20 @@ high, normal, low, or none?), due date
 range?), and search query (title,
 description?).
 ✅ Tasklist must be paginated.
+
+---
+
+## tasks attachement tests
+
+## tasks tags tests
+
+---
+
+## [Authenticated User can archived task]
+
+✅ When archiving a task, I want to receive a 200
+response with the updated task data.
+✅ Archived date is automatically set to now.
+✅ Archived date must be a timestamp.
+✅ When archiving a task I do not own, I want to
+receive a 401 response.

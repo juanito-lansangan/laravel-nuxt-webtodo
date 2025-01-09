@@ -116,6 +116,9 @@ class TaskController extends Controller
         return response()->json([], 204);
     }
 
+    /**
+     * Mark a task as complete
+     */
     public function complete(Task $task): JsonResponse
     {
         Gate::authorize('viewOrModify', $task);
@@ -127,11 +130,41 @@ class TaskController extends Controller
         return response()->json($task, 200);
     }
 
+    /**
+     * Mark a task as incomplete
+     */
     public function incomplete(Task $task): JsonResponse
     {
         Gate::authorize('viewOrModify', $task);
 
         $task->completed_at = null;
+        $task->save();
+
+        return response()->json($task, 200);
+    }
+
+    /**
+     * Archive a task
+     */
+    public function archive(Task $task): JsonResponse
+    {
+        Gate::authorize('viewOrModify', $task);
+
+        $task->update([
+            'archived_at' => now()
+        ]);
+
+        return response()->json($task, 200);
+    }
+
+    /**
+     * Restore an archive task
+     */
+    public function restore(Task $task): JsonResponse
+    {
+        Gate::authorize('viewOrModify', $task);
+
+        $task->archived_at = null;
         $task->save();
 
         return response()->json($task, 200);

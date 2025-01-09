@@ -13,6 +13,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('tasks', TaskController::class);
     Route::patch('/tasks/{task}/complete', [TaskController::class, 'complete'])->name('task.complete');
     Route::patch('/tasks/{task}/incomplete', [TaskController::class, 'incomplete'])->name('task.incomplete');
+    Route::patch('/tasks/{task}/archive', [TaskController::class, 'archive'])->name('task.archive');
+    Route::patch('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('task.restore');
 
     // Route::get('/tags', [TagController::class, 'index']);
     // Route::post('/tags', [TagController::class, 'store']);
