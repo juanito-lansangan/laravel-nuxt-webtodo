@@ -33,7 +33,7 @@ class TaskController extends Controller
                 ->where('title', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%");
         })
-        ->when($request->priority_filter, function($query, $filter) {
+        ->when($request->priority, function($query, $filter) {
             $query
                 ->where('priority', $filter);
         })

@@ -136,13 +136,14 @@ DESC?).
 ✅ Task list must be paginated.
 
 [Authenticated User can filter my tasks]
-○ When filtering tasks, I want to receive a 200
+✅ When filtering tasks, I want to receive a 200
 response with the array of my filtered tasks or
 an empty array if there are no tasks yet.
-■ Tasks must be filtered by completed
+
+✅ Tasks must be filtered by completed
 date (date range?), priority (urgent,
 high, normal, low, or none?), due date
 (date range?), archived date (date
 range?), and search query (title,
 description?).
-■ Tasklist must be paginated.
+✅ Tasklist must be paginated.
