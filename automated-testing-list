@@ -84,7 +84,7 @@ receive a 404 response.
 ✅ When removing a task I do not own, I want to
 receive a 401 response.
 
-[Authenticated User Mark a Task as completed]
+[Authenticated User can mark a task as completed]
 ✅ When marking a task as completed, I want to
 receive a 200 response with the updated task
 data.
@@ -97,7 +97,7 @@ completed, I want to receive a 404 response.
 ✅ When marking a task I do not own as
 completed, I want to receive a 401 response.
 
-[Authenticated User Mark a Task as incomplete]
+[Authenticated User can mark a task as incomplete]
 ✅ When marking a task as incomplete, I want to
 receive a 200 response with the updated task
 data.
@@ -105,7 +105,7 @@ data.
 ✅ When marking a task I do not own as
 incomplete, I want to receive a 401 response.
 
-[Authenticated User add due date]
+[Authenticated User can add due date]
 ✅ When adding a valid due date to a task, I want
 to receive a 200 response with the updated
 task data.
@@ -119,3 +119,13 @@ want to receive a 422 response with error
 messages.
 ✅ When adding a due date to a non-existent
 task, I want to receive a 404 response.
+
+[Authenticated User can sort my tasks]
+✅ When sorting tasks, I want to receive a 200
+response with the array of my sorted tasks or
+an empty array if there are no tasks yet.
+✅ Tasks must be sorted by title,
+description, due date, created date,
+completed date, and priority (ASC and
+DESC?).
+✅ Task list must be paginated.

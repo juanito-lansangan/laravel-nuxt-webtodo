@@ -17,8 +17,10 @@ class TaskController extends Controller
     public function index(Request $request): JsonResponse
     {
         $sortItems = [
+            'title' => 'title',
+            'description' => 'description',
             'created_at' => 'created at',
-            'completed_date' => 'completed',
+            'completed_at' => 'completed',
             'priority' => 'priority level',
             'due_date' => 'due date',
         ];
@@ -58,6 +60,7 @@ class TaskController extends Controller
                 ->orderBy($request->sort_by, $request->sort_order ?? 'ASC');
         })
         ->paginate(10);
+        // dd($data->toRawSql());
 
         return response()->json($data);
 
