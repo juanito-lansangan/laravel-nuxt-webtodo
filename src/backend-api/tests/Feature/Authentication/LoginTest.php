@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\Sanctum;
 
-test('login existing email address and password receive 200 response', function() {
+test('login existing email address and password receive 200 response with user data and a token', function() {
 
     $user = User::factory()->create();
 
@@ -12,7 +13,15 @@ test('login existing email address and password receive 200 response', function(
         'password' => 'password',
     ]);
 
-    $response->assertStatus(200);
+    $user = $response->json('user');
+    $token = $response->json('token');
+
+    $response
+        ->assertStatus(200)
+        ->assertJson([
+            'user' => $user,
+            'token' => $token
+        ]);
 });
 
 test('login with invalid email address and/or password receive 422 response', function() {
@@ -21,7 +30,15 @@ test('login with invalid email address and/or password receive 422 response', fu
         'password' => '',
     ]);
 
-    $response->assertStatus(422);
+    $response
+        ->assertStatus(422)
+        ->assertJson([
+            'message' => 'The email field is required. (and 1 more error)',
+            'errors' => [
+                'email' => ['The email field is required.'],
+                'password' => ['The password field is required.'],
+            ],
+        ]);
 });
 
 test('login with non-existing email address receive 404 response', function() {
