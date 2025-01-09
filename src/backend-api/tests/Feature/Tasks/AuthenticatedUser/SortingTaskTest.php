@@ -270,3 +270,23 @@ test('sorting tasks by priority level receive 200 response with array of sorted 
 
     $response->assertStatus(200);
 });
+
+test('sorting no tasks  receive 200 response with empty array', function() {
+    $userWithSession = User::factory()->create();
+
+    $userWithSessionToken = $userWithSession->createToken($userWithSession->email)->plainTextToken;
+
+    expect($userWithSession->tasks()->count())->toBe(0);
+
+    $response = $this->withHeaders([
+        'Authorization' => "Bearer {$userWithSessionToken}"
+    ])
+    ->getJson("/api/tasks?sort_by=title&sort_order=desc");
+    
+    $sortedTasks = $response->json('data');
+
+    // should be descending order of titles
+    $response
+        ->assertStatus(200)
+        ->assertJson([]);
+});

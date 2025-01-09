@@ -102,6 +102,7 @@ completed, I want to receive a 401 response.
 receive a 200 response with the updated task
 data.
 ✅ Date completed is set to NULL.
+
 ✅ When marking a task I do not own as
 incomplete, I want to receive a 401 response.
 
@@ -114,9 +115,11 @@ task data.
 .
 ✅ When set, the due date must be equal
 or greater than the current date.
+
 ✅ When adding an invalid due date to a task, I
 want to receive a 422 response with error
 messages.
+
 ✅ When adding a due date to a non-existent
 task, I want to receive a 404 response.
 
@@ -124,8 +127,22 @@ task, I want to receive a 404 response.
 ✅ When sorting tasks, I want to receive a 200
 response with the array of my sorted tasks or
 an empty array if there are no tasks yet.
+
 ✅ Tasks must be sorted by title,
 description, due date, created date,
 completed date, and priority (ASC and
 DESC?).
+
 ✅ Task list must be paginated.
+
+[Authenticated User can filter my tasks]
+○ When filtering tasks, I want to receive a 200
+response with the array of my filtered tasks or
+an empty array if there are no tasks yet.
+■ Tasks must be filtered by completed
+date (date range?), priority (urgent,
+high, normal, low, or none?), due date
+(date range?), archived date (date
+range?), and search query (title,
+description?).
+■ Tasklist must be paginated.
