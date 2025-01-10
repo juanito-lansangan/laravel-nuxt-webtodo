@@ -30,6 +30,8 @@ class StoreTaskRequest extends FormRequest
             'due_date' => ['nullable', 'date', 'date_format:Y-m-d', 'after_or_equal:today'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['integer', 'exists:tags,id'],
+            'attachments' => ['nullable', 'array'],
+            'attachments.*' => ['file', 'mimes:svg,png,jpg,mp4,csv,txt,doc,docx', 'max:10240']
         ];
     }
 }

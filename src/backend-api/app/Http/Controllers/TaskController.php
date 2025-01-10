@@ -69,6 +69,22 @@ class TaskController extends Controller
             $task->load('tags');
         }
 
+        if ($request->attachments) {
+            $uploadFiles = [];
+
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('attachments');
+
+                $uploadFiles[] = new Attachment([
+                    'path' => $path,
+                    'type' => $file->getClientOriginalExtension()
+                ]);
+            }
+
+            $task->attachments()->saveMany($uploadFiles);
+            $task->load('attachments');
+        }
+
         return response()->json($task, 200);
     }
 
