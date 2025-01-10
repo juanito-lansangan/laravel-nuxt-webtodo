@@ -22,7 +22,7 @@ test('archiving a task receive 200 response with the updated task data', functio
     $responseTask = $response->json();
 
     // archive date should be the current date
-    $archivedAt = Carbon::parse($responseTask['archived_at'])->format('Y-m-d');
+    $archivedAt = Carbon::parse($responseTask['data']['archived_at'])->format('Y-m-d');
 
     expect($archivedAt)->toBe(now()->format('Y-m-d'));
 

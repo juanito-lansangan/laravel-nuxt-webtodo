@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TagResource;
 use App\Models\Tag;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class TagController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): AnonymousResourceCollection
     {
         $search = $request->search ?? '';
 
         $tags = Tag::where('name', 'like', "%{$search}%")->get();
 
-        return response()->json($tags, 200);
+        return TagResource::collection($tags);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): TagResource
     {
         $fields = $request->validate([
             'name' => ['required', 'min:3', 'unique:tags']
@@ -31,6 +32,6 @@ class TagController extends Controller
 
         $tag = Tag::create($fields);
 
-        return response()->json($tag, 200);
+        return TagResource::make($tag);
     }
 }

@@ -17,8 +17,8 @@ test('viewing a single task as an aunthenticated user receive 200', function() {
         ->getJson("/api/tasks/{$task->id}");
 
     $responseTask = $response->json();
-
-    expect($task->id)->toBe($responseTask['id']);
+    
+    expect($task->id)->toBe($responseTask['data']['id']);
     
     $response
         ->assertStatus(200)
@@ -55,7 +55,7 @@ test('viewing all tasks as an authenticated user receive 200 response with array
     ->getJson('/api/tasks');
 
     $responseTasks = $response->json('data');
-    
+
     $response
         ->assertStatus(200);
 

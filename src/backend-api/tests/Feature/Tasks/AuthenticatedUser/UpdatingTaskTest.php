@@ -25,7 +25,7 @@ test('editing a task with valid inputs receive 200 response with updated task da
 
     $responseTask = $response->json();
 
-    expect($task->id)->toBe($responseTask['id']);
+    expect($task->id)->toBe($responseTask['data']['id']);
 
     $response
         ->assertStatus(200)
@@ -52,7 +52,7 @@ test('updating a task as an authenticated user with tags receive 200 response', 
     ]);
 
     $responseTask = $response->json();
-    expect($responseTask['tags'])->toHaveCount(3);
+    expect($responseTask['data']['tags'])->toHaveCount(3);
 
     $response
         ->assertStatus(200)

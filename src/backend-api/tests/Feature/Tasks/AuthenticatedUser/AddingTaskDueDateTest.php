@@ -21,7 +21,7 @@ test('adding a valid due date to a task receive 200 response with the updated ta
     ]);
 
     $responseTask = $response->json();
-    $dueDate = Carbon::parse($responseTask['due_date'])->format('Y-m-d');
+    $dueDate = Carbon::parse($responseTask['data']['due_date'])->format('Y-m-d');
 
     expect($dueDate)->toBe(now()->format('Y-m-d'));
 

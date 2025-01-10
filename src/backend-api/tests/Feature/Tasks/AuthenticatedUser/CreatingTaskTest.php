@@ -24,7 +24,7 @@ test('creating a task as an authenticated user with valid title, description, du
     $responseTask = $response->json();
 
     $response
-        ->assertStatus(200)
+        ->assertStatus(201)
         ->assertJson($responseTask);
 });
 
@@ -48,10 +48,10 @@ test('creating a task as an authenticated user with tags receive 200 response', 
     ]);
 
     $responseTask = $response->json();
-    expect($responseTask['tags'])->toHaveCount(3);
+    expect($responseTask['data']['tags'])->toHaveCount(3);
 
     $response
-        ->assertStatus(200)
+        ->assertStatus(201)
         ->assertJson($responseTask);
 });
 
@@ -104,10 +104,10 @@ test('creating a task with valid files receive 200 response with task data that 
         'attachments' => $files
     ]);
 
-    $responseTask = $response->json();
+    $responseTask = $response->json('data');
     expect($responseTask['attachments'])->toHaveCount(3);
 
-    $response->assertStatus(200);
+    $response->assertStatus(201);
 });
 
 test('creating a task with invalid files receive 422 response with error message', function() {
