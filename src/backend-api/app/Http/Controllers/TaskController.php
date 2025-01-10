@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Attachment;
 use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rules\File;
 
 class TaskController extends Controller
 {
@@ -181,6 +183,33 @@ class TaskController extends Controller
 
         $task->load('tags');
         
+        return response()->json($task, 200);
+    }
+
+    public function addAttachments(Task $task, Request $request): JsonResponse
+    {
+        $request->validate([
+            'attachments' => ['required', 'array'],
+            'attachments.*' => ['file', 'mimes:svg,png,jpg,mp4,csv,txt,doc,docx', 'max:10240']
+        ]);
+
+        Gate::authorize('viewOrModify', $task);
+        
+        $uploadFiles = [];
+
+        foreach ($request->file('attachments') as $file) {
+            $path = $file->store('attachments');
+
+            $uploadFiles[] = new Attachment([
+                'path' => $path,
+                'type' => $file->getClientOriginalExtension()
+            ]);
+        }
+
+        $task->attachments()->saveMany($uploadFiles);
+
+        $task->load('attachments');
+
         return response()->json($task, 200);
     }
     

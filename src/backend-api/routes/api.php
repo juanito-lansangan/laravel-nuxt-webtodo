@@ -17,6 +17,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::patch('/tasks/{task}/archive', [TaskController::class, 'archive'])->name('tasks.archive');
     Route::patch('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
     Route::patch('/tasks/{task}/tags', [TaskController::class, 'addTags'])->name('tasks.addtags');
+    Route::patch('/tasks/{task}/attachments', [TaskController::class, 'addAttachments'])->name('tasks.attachments');
 
     Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
     Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
