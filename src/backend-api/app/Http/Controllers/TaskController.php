@@ -18,6 +18,7 @@ class TaskController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        // valid sort items
         $sortItems = [
             'title' => 'title',
             'description' => 'description',
@@ -27,28 +28,19 @@ class TaskController extends Controller
             'due_date' => 'due date',
         ];
 
+        // valid date filters
+        $dateFilters = [
+            'due_date',
+            'completed_at',
+            'archived_at',
+            'created_at',
+        ];
+
         $search = $request->search;
 
         $data = $request->user()->tasks()
-        ->where(function($query) use ($search) {
-            $query
-                ->where('title', 'like', "%{$search}%")
-                ->orWhere('description', 'like', "%{$search}%");
-        })
-        ->when($request->priority, function($query, $filter) {
-            $query
-                ->where('priority', $filter);
-        })
-        ->when($request->date_filter && $request->date_from && $request->date_to, function($query) use ($request) {
-            $query
-                ->whereDate($request->date_filter, '>=', $request->date_from)
-                ->whereDate($request->date_filter, '<=', $request->date_to);
-
-        })
-        ->when($request->sort_by && in_array($request->sort_by, array_keys($sortItems)), function($query) use ($request) {
-            $query
-                ->orderBy($request->sort_by, $request->sort_order ?? 'ASC');
-        })
+        ->filter($request, $search, $dateFilters)
+        ->sort($request, $sortItems)
         ->paginate(10);
 
         return response()->json($data);
