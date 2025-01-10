@@ -63,7 +63,8 @@ class TaskController extends Controller
         $task = $request->user()->tasks()->create($fields);
 
         if ($request->tags) {
-            $task->tags()->sync($request->only(['tags']));
+            $task->tags()->sync($request->tags);
+            $task->load('tags');
         }
 
         return response()->json($task, 200);
@@ -91,7 +92,8 @@ class TaskController extends Controller
         $task->update($fields);
 
         if ($request->tags) {
-            $task->tags()->sync($request->only(['tags']));
+            $task->tags()->sync($request->tags);
+            $task->load('tags');
         }
 
         return response()->json($task, 200);

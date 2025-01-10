@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\TaskPriority;
+use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
 
@@ -19,6 +20,33 @@ test('creating a task as an authenticated user with valid title, description, du
     ]);
 
     $responseTask = $response->json();
+
+    $response
+        ->assertStatus(200)
+        ->assertJson($responseTask);
+});
+
+
+test('creating a task as an authenticated user with tags receive 200 response', function() {
+    $user = User::factory()->create();
+    $token = $user->createToken($user->email)->plainTextToken;
+
+    $tags = Tag::factory(3)->create();
+    $tagsId = $tags->pluck('id')->toArray();
+
+    $response = $this->withHeaders([
+        'Authorization' => "Bearer {$token}",
+    ])
+    ->postJson('/api/tasks', [
+        'title' => 'new task',
+        'description' => 'test description',
+        'due_date' => now()->addDays(5)->format('Y-m-d'),
+        'priority' => TaskPriority::Urgent,
+        'tags' => $tagsId
+    ]);
+
+    $responseTask = $response->json();
+    expect($responseTask['tags'])->toHaveCount(3);
 
     $response
         ->assertStatus(200)
