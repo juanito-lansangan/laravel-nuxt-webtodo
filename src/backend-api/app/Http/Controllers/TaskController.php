@@ -186,6 +186,10 @@ class TaskController extends Controller
         return response()->json($task, 200);
     }
 
+    /**
+     * Adding attachments to a task
+     *
+     */
     public function addAttachments(Task $task, Request $request): JsonResponse
     {
         $request->validate([
