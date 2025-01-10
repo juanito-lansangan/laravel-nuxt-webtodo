@@ -18,7 +18,7 @@ test('creating tag receive 200 response with tag data', function() {
     expect($tag->name)->toBe('laravel');
 
     $response
-        ->assertStatus(200);
+        ->assertStatus(201);
 });
 
 test('creating invalid tag receive 422 response with error message', function() {
@@ -53,7 +53,7 @@ test('view all tags receive 200 response with tags data', function() {
     ])
     ->getJson("/api/tags");
 
-    $responseTags = $response->json();
+    $responseTags = $response->json('data');
 
     expect($responseTags)->toHaveCount(5);
 
@@ -81,7 +81,7 @@ test('search tag receive 200 response with tag data', function() {
     ])
     ->getJson("/api/tags?search=lara");
 
-    $responseTags = $response->json();
+    $responseTags = $response->json('data');
 
     expect($responseTags)->toHaveCount(2);
 

@@ -21,9 +21,9 @@ test('marking a task as complete receive 200 response with updated task data', f
     $responseTask = $response->json();
 
     // check if completed_at is date now
-    $completedAt = Carbon::parse($responseTask['completed_at'])->format('Y-m-d');
+    $completedAt = Carbon::parse($responseTask['data']['completed_at'])->format('Y-m-d');
 
-    expect($task->id)->toBe($responseTask['id']);
+    expect($task->id)->toBe($responseTask['data']['id']);
     expect($completedAt)->toBe(now()->format('Y-m-d'));
 
     $response

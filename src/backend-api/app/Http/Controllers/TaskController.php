@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttachmentRequest;
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\TagRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Models\Attachment;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use App\Services\FileAttachmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rules\File;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @response AnonymousResourceCollection<LengthAwarePaginator<TaskResource>>
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): AnonymousResourceCollection
     {
+        // valid sort items
         $sortItems = [
             'title' => 'title',
             'description' => 'description',
@@ -27,38 +32,28 @@ class TaskController extends Controller
             'due_date' => 'due date',
         ];
 
+        // valid date filters
+        $dateFilters = [
+            'due_date',
+            'completed_at',
+            'archived_at',
+            'created_at',
+        ];
+
         $search = $request->search;
 
         $data = $request->user()->tasks()
-        ->where(function($query) use ($search) {
-            $query
-                ->where('title', 'like', "%{$search}%")
-                ->orWhere('description', 'like', "%{$search}%");
-        })
-        ->when($request->priority, function($query, $filter) {
-            $query
-                ->where('priority', $filter);
-        })
-        ->when($request->date_filter && $request->date_from && $request->date_to, function($query) use ($request) {
-            $query
-                ->whereDate($request->date_filter, '>=', $request->date_from)
-                ->whereDate($request->date_filter, '<=', $request->date_to);
-
-        })
-        ->when($request->sort_by && in_array($request->sort_by, array_keys($sortItems)), function($query) use ($request) {
-            $query
-                ->orderBy($request->sort_by, $request->sort_order ?? 'ASC');
-        })
+        ->filter($request, $search, $dateFilters)
+        ->sort($request, $sortItems)
         ->paginate(10);
 
-        return response()->json($data);
-
+        return TaskResource::collection($data);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTaskRequest $request): JsonResponse
+    public function store(StoreTaskRequest $request, FileAttachmentService $fileAttachmentService): TaskResource
     {
         $fields = $request->validated();
         
@@ -66,42 +61,29 @@ class TaskController extends Controller
 
         if ($request->tags) {
             $task->tags()->sync($request->tags);
-            $task->load('tags');
         }
 
         if ($request->attachments) {
-            $uploadFiles = [];
-
-            foreach ($request->file('attachments') as $file) {
-                $path = $file->store('attachments');
-
-                $uploadFiles[] = new Attachment([
-                    'path' => $path,
-                    'type' => $file->getClientOriginalExtension()
-                ]);
-            }
-
-            $task->attachments()->saveMany($uploadFiles);
-            $task->load('attachments');
+            $fileAttachmentService->upload($request->attachments, $task);
         }
 
-        return response()->json($task, 200);
+        return TaskResource::make($task);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Task $task): JsonResponse
+    public function show(Task $task): TaskResource
     {
         Gate::authorize('viewOrModify', $task);
 
-        return response()->json($task, 200);
+        return TaskResource::make($task);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Task $task): JsonResponse
+    public function update(UpdateTaskRequest $request, Task $task): TaskResource
     {
         Gate::authorize('viewOrModify', $task);
 
@@ -111,10 +93,9 @@ class TaskController extends Controller
 
         if ($request->tags) {
             $task->tags()->sync($request->tags);
-            $task->load('tags');
         }
 
-        return response()->json($task, 200);
+        return TaskResource::make($task);
     }
 
     /**
@@ -132,7 +113,7 @@ class TaskController extends Controller
     /**
      * Mark a task as complete
      */
-    public function complete(Task $task): JsonResponse
+    public function complete(Task $task): TaskResource
     {
         Gate::authorize('viewOrModify', $task);
 
@@ -140,26 +121,26 @@ class TaskController extends Controller
             'completed_at' => now()
         ]);
 
-        return response()->json($task, 200);
+        return TaskResource::make($task);
     }
 
     /**
      * Mark a task as incomplete
      */
-    public function incomplete(Task $task): JsonResponse
+    public function incomplete(Task $task): TaskResource
     {
         Gate::authorize('viewOrModify', $task);
 
         $task->completed_at = null;
         $task->save();
 
-        return response()->json($task, 200);
+        return TaskResource::make($task);
     }
 
     /**
      * Archive a task
      */
-    public function archive(Task $task): JsonResponse
+    public function archive(Task $task): TaskResource
     {
         Gate::authorize('viewOrModify', $task);
 
@@ -167,70 +148,45 @@ class TaskController extends Controller
             'archived_at' => now()
         ]);
 
-        return response()->json($task, 200);
+        return TaskResource::make($task);
     }
 
     /**
      * Restore an archive task
      */
-    public function restore(Task $task): JsonResponse
+    public function restore(Task $task): TaskResource
     {
         Gate::authorize('viewOrModify', $task);
 
         $task->archived_at = null;
         $task->save();
 
-        return response()->json($task, 200);
+        return TaskResource::make($task);
     }
 
     /**
      * Adding tags to a task
      */
-    public function addTags(Task $task, Request $request): JsonResponse
+    public function addTags(Task $task, TagRequest $request): TaskResource
     {
-        $request->validate([
-            'tags' => ['required', 'array'],
-            'tags.*' => ['integer', 'exists:tags,id']
-        ]);
-
         Gate::authorize('viewOrModify', $task);
 
         $task->tags()->sync($request->tags);
-
-        $task->load('tags');
         
-        return response()->json($task, 200);
+        return TaskResource::make($task);
     }
 
     /**
      * Adding attachments to a task
      *
      */
-    public function addAttachments(Task $task, Request $request): JsonResponse
+    public function addAttachments(Task $task, AttachmentRequest $request, FileAttachmentService $fileAttachmentService): TaskResource
     {
-        $request->validate([
-            'attachments' => ['required', 'array'],
-            'attachments.*' => ['file', 'mimes:svg,png,jpg,mp4,csv,txt,doc,docx', 'max:10240']
-        ]);
-
         Gate::authorize('viewOrModify', $task);
         
-        $uploadFiles = [];
+        $fileAttachmentService->upload($request->attachments, $task);
 
-        foreach ($request->file('attachments') as $file) {
-            $path = $file->store('attachments');
-
-            $uploadFiles[] = new Attachment([
-                'path' => $path,
-                'type' => $file->getClientOriginalExtension()
-            ]);
-        }
-
-        $task->attachments()->saveMany($uploadFiles);
-
-        $task->load('attachments');
-
-        return response()->json($task, 200);
+        return TaskResource::make($task);
     }
     
 }

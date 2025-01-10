@@ -27,7 +27,7 @@ test('uploading valid files receive 200 response with task data that includes at
         'attachments' => $files
     ]);
 
-    $responseTask = $response->json();
+    $responseTask = $response->json('data');
     expect($responseTask['attachments'])->toHaveCount(3);
 
     $response->assertStatus(200);

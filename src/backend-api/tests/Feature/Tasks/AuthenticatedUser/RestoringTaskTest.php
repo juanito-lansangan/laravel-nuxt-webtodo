@@ -19,7 +19,7 @@ test('restoring a task receive 200 response with updated task data', function() 
     ->patchJson("/api/tasks/{$task->id}/restore");
 
     $responseTask = $response->json();
-    $archivedAt = $responseTask['archived_at'] ;
+    $archivedAt = $responseTask['data']['archived_at'] ;
 
     // at this point the archived_at should be null
     expect($archivedAt)->toBeNull();

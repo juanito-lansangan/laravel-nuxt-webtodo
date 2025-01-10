@@ -24,7 +24,7 @@ test('adding valid tags to a task receive 200 response with the task data that i
     $responseTask = $response->json();
 
     // we can expect that the reponse task have 2 tags
-    $taskTags = $responseTask['tags'];
+    $taskTags = $responseTask['data']['tags'];
     expect($taskTags)->toHaveCount(2);
 
     $response

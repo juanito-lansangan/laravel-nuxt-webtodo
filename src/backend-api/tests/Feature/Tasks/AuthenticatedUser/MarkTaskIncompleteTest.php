@@ -23,7 +23,7 @@ test('marking a task as incomplete receive 200 response with the updated task da
     $responseTask = $response->json();
 
     // completed_at should be null at this point
-    expect($responseTask['completed_at'])->toBeNull();
+    expect($responseTask['data']['completed_at'])->toBeNull();
 
     $response
         ->assertStatus(200)
