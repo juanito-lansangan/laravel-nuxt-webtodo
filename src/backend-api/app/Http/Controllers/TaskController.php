@@ -61,12 +61,10 @@ class TaskController extends Controller
 
         if ($request->tags) {
             $task->tags()->sync($request->tags);
-            $task->load('tags');
         }
 
         if ($request->attachments) {
             $fileAttachmentService->upload($request->attachments, $task);
-            $task->load('attachments');
         }
 
         return TaskResource::make($task);
@@ -95,7 +93,6 @@ class TaskController extends Controller
 
         if ($request->tags) {
             $task->tags()->sync($request->tags);
-            $task->load('tags');
         }
 
         return TaskResource::make($task);
@@ -175,8 +172,6 @@ class TaskController extends Controller
         Gate::authorize('viewOrModify', $task);
 
         $task->tags()->sync($request->tags);
-
-        $task->load('tags');
         
         return TaskResource::make($task);
     }
@@ -190,8 +185,6 @@ class TaskController extends Controller
         Gate::authorize('viewOrModify', $task);
         
         $fileAttachmentService->upload($request->attachments, $task);
-
-        $task->load('attachments');
 
         return TaskResource::make($task);
     }
