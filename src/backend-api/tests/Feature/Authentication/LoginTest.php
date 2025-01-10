@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Sanctum\Sanctum;
 
 test('login existing email address and password receive 200 response with user data and a token', function() {
 

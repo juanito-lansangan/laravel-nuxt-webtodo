@@ -198,3 +198,4 @@ response with the updated task data.
 receive a 404 response.
 ✅ When restoring a task I do not own, I want to
 receive a 401 response.
+✅ Archived tasks should be deleted after a week automatically.
