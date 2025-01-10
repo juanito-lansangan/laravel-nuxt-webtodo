@@ -191,6 +191,8 @@ response with the updated task data.
 ✅ When archiving a task I do not own, I want to
 receive a 401 response.
 
+## [Authenticated User can restore task]
+
 ✅ When restoring a task, I want to receive a 200
 response with the updated task data.
 ✅ Archived date is set to NULL.
@@ -199,3 +201,32 @@ receive a 404 response.
 ✅ When restoring a task I do not own, I want to
 receive a 401 response.
 ✅ Archived tasks should be deleted after a week automatically.
+
+## [Authenticated User can attached multiple files to a task]
+
+○ When uploading valid files, I want to receive a
+200 response with the task data that includes
+an array of attachments.
+■ Image format can be SVG, PNG, or
+JPG
+■ Video format can be mp4
+■ Document format can be CSV, TXT ,
+DOC, DOCX
+○ When uploading invalid files, I want to receive
+a 422 response with error messages.
+○ When uploading files to a non-existent task, I
+want to receive a 404 response.
+○ When uploading files to a task I do not own, I
+want to receive a 401 response
+
+## [Authenticated User can add multiple tags to a task]
+
+✅ When adding valid tags to a task, I want to
+receive a 200 response with the task data that
+includes an array of tags.
+✅ When adding invalid tags, I want to receive a
+422 response with error messages.
+✅ When adding tags to a non-existent task, I
+want to receive a 404 response.
+✅ When adding tags to a task I do not own, I
+want to receive a 401 response.

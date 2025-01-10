@@ -163,7 +163,7 @@ test('sorting tasks by created date receive 200 response with array of sorted ta
     ->getJson("/api/tasks?sort_by=created_at&sort_order=desc");
     
     $sortedTasks = $response->json('data');
-    // dd($sortedTasks);
+
     $first = Carbon::parse($sortedTasks[0]['created_at'])->format('Y-m-d');
     $second = Carbon::parse($sortedTasks[1]['created_at'])->format('Y-m-d');
     $third = Carbon::parse($sortedTasks[2]['created_at'])->format('Y-m-d');

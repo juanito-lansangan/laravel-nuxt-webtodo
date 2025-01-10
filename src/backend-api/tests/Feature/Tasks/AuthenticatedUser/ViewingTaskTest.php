@@ -16,7 +16,6 @@ test('viewing a single task as an aunthenticated user receive 200', function() {
         ])
         ->getJson("/api/tasks/{$task->id}");
 
-        // dd($task->due_date?->toISOString());
     $responseTask = $response->json();
 
     expect($task->id)->toBe($responseTask['id']);

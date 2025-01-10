@@ -37,22 +37,10 @@ class TaskController extends Controller
             $query
                 ->where('priority', $filter);
         })
-        ->when($request->due_date_from && $request->due_date_to, function($query) use ($request) {
+        ->when($request->date_filter && $request->date_from && $request->date_to, function($query) use ($request) {
             $query
-                ->whereDate('due_date', '>=', $request->due_date_from)
-                ->whereDate('due_date', '<=', $request->due_date_to);
-
-        })
-        ->when($request->completed_at_from && $request->completed_at_to, function($query) use ($request) {
-            $query
-                ->whereDate('completed_at', '>=', $request->completed_at_from)
-                ->whereDate('completed_at', '<=', $request->completed_at_to);
-
-        })
-        ->when($request->archived_at_from && $request->archived_at_to, function($query) use ($request) {
-            $query
-                ->whereDate('archived_at', '>=', $request->archived_at_from)
-                ->whereDate('archived_at', '<=', $request->archived_at_to);
+                ->whereDate($request->date_filter, '>=', $request->date_from)
+                ->whereDate($request->date_filter, '<=', $request->date_to);
 
         })
         ->when($request->sort_by && in_array($request->sort_by, array_keys($sortItems)), function($query) use ($request) {
@@ -60,7 +48,6 @@ class TaskController extends Controller
                 ->orderBy($request->sort_by, $request->sort_order ?? 'ASC');
         })
         ->paginate(10);
-        // dd($data->toRawSql());
 
         return response()->json($data);
 
@@ -75,7 +62,9 @@ class TaskController extends Controller
         
         $task = $request->user()->tasks()->create($fields);
 
-        // $task->tags()->sync($fields->only(['tags']));
+        if ($request->tags) {
+            $task->tags()->sync($request->only(['tags']));
+        }
 
         return response()->json($task, 200);
     }
@@ -100,6 +89,10 @@ class TaskController extends Controller
         $fields = $request->validated();
         
         $task->update($fields);
+
+        if ($request->tags) {
+            $task->tags()->sync($request->only(['tags']));
+        }
 
         return response()->json($task, 200);
     }
@@ -167,6 +160,25 @@ class TaskController extends Controller
         $task->archived_at = null;
         $task->save();
 
+        return response()->json($task, 200);
+    }
+
+    /**
+     * Adding tags to a task
+     */
+    public function addTags(Task $task, Request $request): JsonResponse
+    {
+        $request->validate([
+            'tags' => ['required', 'array'],
+            'tags.*' => ['integer', 'exists:tags,id']
+        ]);
+
+        Gate::authorize('viewOrModify', $task);
+
+        $task->tags()->sync($request->tags);
+
+        $task->load('tags');
+        
         return response()->json($task, 200);
     }
     
