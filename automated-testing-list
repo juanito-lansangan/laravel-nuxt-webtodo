@@ -230,3 +230,8 @@ includes an array of tags.
 want to receive a 404 response.
 ✅ When adding tags to a task I do not own, I
 want to receive a 401 response.
+
+✅ creating tag receive 200 response with tag data
+✅ creating invalid tag receive 422 response with error message
+✅ view all tags receive 200 response with tag data
+✅ search tag receive 200 response with tag data
