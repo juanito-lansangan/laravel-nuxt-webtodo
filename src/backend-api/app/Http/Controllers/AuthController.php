@@ -10,6 +10,9 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
+    /**
+     * Register the user
+     */
     public function register(Request $request): JsonResponse
     {
         $fields = $request->validate([
@@ -32,6 +35,9 @@ class AuthController extends Controller
         return response()->json(['user' => $user, 'token' => $token->plainTextToken], 200);
     }
 
+    /**
+     * Login the user
+     */
     public function login(Request $request): JsonResponse
     {
         $request->validate([
@@ -55,6 +61,9 @@ class AuthController extends Controller
         return response()->json(['user' => $user, 'token' => $token->plainTextToken], 200);
     }
 
+    /**
+     * Logout the user
+     */
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
