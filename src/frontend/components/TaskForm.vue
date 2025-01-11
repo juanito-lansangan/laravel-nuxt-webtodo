@@ -101,11 +101,14 @@ const tagOptions = ["laravel", "laracon", "vue", "nuxt"];
 
   .card {
     padding: 20px;
-  }
+    &-title h2 {
+      font-size: 18px;
+      margin: 0;
+    }
 
-  .card-title h2 {
-    font-size: 18px;
-    margin: 0;
+    &-body {
+      margin-top: 10px;
+    }
   }
 
   .back-link {
