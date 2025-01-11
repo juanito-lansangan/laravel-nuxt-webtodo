@@ -1,0 +1,16 @@
+@use "../variables" as *;
+
+.attachment {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+
+  .attachment-icon {
+    margin-right: 2px;
+  }
+
+  .attachment-label {
+    display: inline-block;
+    font-size: $font-size-sm;
+  }
+}

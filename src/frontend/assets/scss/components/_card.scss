@@ -1,0 +1,54 @@
+@use "../variables" as *;
+@use "../utilities" as *;
+
+.card {
+  padding: $base-padding;
+  border: $base-border-thickness solid #ddd;
+  border-radius: 6px;
+  box-shadow: $base-box-shadow;
+
+  .card-title {
+    font-size: $font-size-md;
+    font-weight: normal;
+    margin: 0;
+    padding-top: 4px;
+    padding-bottom: 15px;
+    border-bottom: $base-border-thickness solid $light-gray;
+  }
+
+  .card-body {
+    font-size: $base-font-size;
+    padding: 10px 0;
+  }
+
+  .card-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .card-status {
+    display: flex;
+    gap: 10px;
+  }
+
+  .card-tags {
+    overflow: hidden;
+    padding: 4px 0;
+  }
+
+  .card-footer {
+    display: flex;
+    gap: 4px;
+    border-top: $base-border-thickness solid $light-gray;
+    padding-top: 10px;
+  }
+}
+
+// .card-sm {
+//   max-width: 300px;
+//   min-height: 200px;
+//   max-height: 350px;
+
+//   .card-body {
+//     max-height: 180px;
+//   }
+// }

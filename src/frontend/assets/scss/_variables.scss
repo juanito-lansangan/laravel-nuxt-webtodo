@@ -1,0 +1,42 @@
+// theme colors
+
+$primary: #326dee;
+$secondary: #1ac886;
+$danger: #d32752;
+$warning: #f6c31c;
+$gray: #808080;
+$light-gray: #ddd;
+
+$colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "danger": $danger,
+  "warning": $warning,
+  "gray": $gray,
+);
+
+$indicators: (
+  "urgent": $danger,
+  "high": #ffa600,
+  "normal": $secondary,
+  "low": $gray,
+  "complete": $secondary,
+  "archive": $gray,
+);
+
+// spacing
+$base-padding: 12px;
+$base-margin: 12px;
+
+// borders
+$base-border-thickness: 1px;
+$base-border-radius: 20px;
+
+// box-shadow
+$base-box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+
+// font sizes
+$base-font-size: 12px;
+$font-size-sm: 10px;
+$font-size-md: 14px;
+$font-size-lg: 18px;

@@ -1,0 +1,23 @@
+@use "../variables" as *;
+
+.header {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .nav-brand {
+    font-size: $font-size-lg;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}

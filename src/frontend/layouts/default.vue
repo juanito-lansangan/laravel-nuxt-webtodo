@@ -1,8 +1,14 @@
 <template>
   <div>
-    <h1>Default Layout</h1>
+    <Header />
     <main>
       <slot />
     </main>
   </div>
 </template>
+
+<script setup>
+const logout = () => {
+  console.log(logout);
+};
+</script>
