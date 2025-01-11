@@ -1,15 +1,23 @@
 @use "variables" as *;
 
-.ellipsis {
+@mixin ellipsis($lines: 1) {
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+}
+
+.ellipsis-line-1 {
+  @include ellipsis(1);
 }
 
 .ellipsis-line-3 {
-  overflow: hidden;
-  display: -webkit-box;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  @include ellipsis(3);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
 }

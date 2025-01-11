@@ -1,8 +1,12 @@
 <template>
   <div class="card">
-    <h1 class="card-title ellipsis">
-      Card title Card title Card titleCard titleCard titleCard titleCard title
-    </h1>
+    <h2 class="card-title">
+      <span class="ellipsis-line-1">
+        Card title Card title Card titleCard titleCard titleCard titleCard title
+        Card title Card title Card titleCard titleCard titleCard titleCard title
+        Card title Card title Card titleCard titleCard titleCard titleCard title
+      </span>
+    </h2>
     <div class="card-body">
       <div class="card-container">
         <div class="card-priority">
@@ -27,11 +31,13 @@
         </div>
       </div>
 
-      <!-- <p class="ellipsis-line-3"> -->
-      <p>
+      <p class="ellipsis-line-3">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis impedit
         porro iste optio repudiandae vero fuga quis dignissimos alias dolorem
-        nulla, nam esse in fugiat ut eius, odit blanditiis maxime.
+        nulla, nam esse in fugiat ut eius, odit blanditiis maxime. Lorem ipsum
+        dolor sit amet consectetur adipisicing elit. Nobis impedit porro iste
+        optio repudiandae vero fuga quis dignissimos alias dolorem nulla, nam
+        esse in fugiat ut eius, odit blanditiis maxime.
       </p>
       <div class="card-tags">
         <span class="tag">laravel</span>

@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <nav class="nav">
+    <nav class="nav container">
       <h3 class="nav-brand">My TODO App</h3>
       <div class="nav-actions">
         <NuxtLink class="btn-icon btn-normal btn-secondary" to="/tasks/create">

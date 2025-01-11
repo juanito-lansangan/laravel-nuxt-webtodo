@@ -14,6 +14,9 @@
     padding-top: 4px;
     padding-bottom: 15px;
     border-bottom: $base-border-thickness solid $light-gray;
+    max-height: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .card-body {
