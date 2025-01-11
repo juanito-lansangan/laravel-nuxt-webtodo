@@ -1,11 +1,14 @@
 <template>
   <div class="card">
     <h2 class="card-title">
-      <span class="ellipsis-line-1">
-        Card title Card title Card titleCard titleCard titleCard titleCard title
-        Card title Card title Card titleCard titleCard titleCard titleCard title
-        Card title Card title Card titleCard titleCard titleCard titleCard title
-      </span>
+      <NuxtLink :to="`/tasks/${card.id}`">
+        <span class="ellipsis-line-1">
+          Card title Card title Card titleCard titleCard titleCard titleCard
+          title Card title Card title Card titleCard titleCard titleCard
+          titleCard title Card title Card title Card titleCard titleCard
+          titleCard titleCard title
+        </span>
+      </NuxtLink>
     </h2>
     <div class="card-body">
       <div class="card-container">
@@ -46,21 +49,28 @@
         <span class="tag">nuxt</span>
         <span class="tag">+10 more</span>
       </div>
-      <div class="attachment">
-        <Icon
-          class="attachment-icon"
-          name="material-symbols:file-present-outline-rounded"
-          style="color: black"
-          size="18"
-        />
-        <span class="attachment-label">3 attachments</span>
+      <div class="card-attachment-wrapper">
+        <a href="#" class="card-attachment">
+          <Icon
+            class="card-attachment-icon"
+            name="material-symbols:file-present-outline-rounded"
+            style="color: black"
+            size="18"
+          />
+          <span class="card-attachment-label">Download attachments</span>
+        </a>
       </div>
     </div>
     <div class="card-footer">
-      <button class="btn btn-sm btn-primary">Complete</button>
+      <button class="btn btn-sm btn-secondary">Complete</button>
       <!-- toggle -->
       <button class="btn btn-sm">Archive</button>
-      <button class="btn btn-sm">Restore</button>
+      <button class="btn btn-sm btn-primary">Restore</button>
     </div>
   </div>
 </template>
+<script setup>
+defineProps({
+  card: Object,
+});
+</script>

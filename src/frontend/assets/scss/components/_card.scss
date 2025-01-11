@@ -46,6 +46,21 @@
   }
 }
 
+.card-attachment {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 10px;
+
+  &-icon {
+    margin-right: 2px;
+  }
+
+  &-label {
+    display: inline-block;
+    font-size: $font-size-sm;
+  }
+}
+
 // .card-sm {
 //   max-width: 300px;
 //   min-height: 200px;

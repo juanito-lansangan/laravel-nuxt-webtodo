@@ -1,6 +1,4 @@
 <template>
-  <section>
-    <h1>Create Task</h1>
-    <p>Form here</p>
-  </section>
+  <TaskForm action="create" />
 </template>
+<script setup></script>

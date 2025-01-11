@@ -1,6 +1,36 @@
 @use "../variables" as *;
 
-.select {
+.form-label {
+  font-size: $font-size-md;
+  font-weight: 550;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-input-group {
+  margin-bottom: 10px;
+}
+
+.form-input-text {
+  display: block;
+  width: 100%;
+  border: 2px solid $light-gray;
+  border-radius: 6px;
+  font-size: $font-size-md;
+  padding: 12px;
+  font-weight: 550;
+}
+
+.form-input-textarea {
+  border: 2px solid $light-gray;
+  display: block;
+  border-radius: 6px;
+  font-size: $font-size-md;
+  padding: 12px;
+  font-weight: 550;
+}
+
+.form-select {
   border: 2px solid $light-gray;
   width: 100%;
   border-radius: 6px;
