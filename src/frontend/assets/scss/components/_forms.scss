@@ -44,3 +44,43 @@
   background-position: right 12px center;
   background-size: 24px 24px;
 }
+
+// 3rd party forms
+.form-input-group {
+  .dp__input {
+    border: 2px solid $light-gray;
+    display: block;
+    border-radius: 6px;
+    font-size: $font-size-md;
+    padding: 10px;
+    font-weight: 550;
+  }
+
+  .v-select {
+    .vs__search {
+      font-size: $font-size-md;
+      padding: 8px;
+      font-weight: 550;
+    }
+
+    .vs__dropdown-toggle {
+      border: 2px solid $light-gray;
+      // display: block;
+      border-radius: 6px;
+      font-size: $font-size-md;
+      // padding: 10px;
+      font-weight: 550;
+    }
+    .vs__selected {
+      padding: 4px 4px;
+    }
+
+    .vs__dropdown-option {
+      font-size: $font-size-md;
+    }
+
+    .vs__actions {
+      padding-right: 15px;
+    }
+  }
+}

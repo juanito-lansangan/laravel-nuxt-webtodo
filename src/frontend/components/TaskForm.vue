@@ -70,7 +70,7 @@
         </form>
       </div>
       <div class="card-footer">
-        <button class="btn btn-normal btn-primary" @click="handleSubmit">
+        <button class="btn btn-md btn-primary" @click="handleSubmit">
           {{ action == "create-task" ? "Create" : "Update" }}
         </button>
       </div>
@@ -90,7 +90,7 @@ const props = defineProps({
 const form = reactive({
   title: '',
   description: '',
-  priority: '',
+  priority: 1,
   due_date: null,
   tags: [],
 });
