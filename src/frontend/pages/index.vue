@@ -12,15 +12,17 @@
     <!-- {{ tasks.data }} -->
 
     <Pagination :pageData="tasks" @changePage="refetch" />
+    <Preloader v-if="showPreloader" />
   </section>
 </template>
 
 <script setup>
 import { ref, watch } from "vue";
 
-const token = "1|PtcPH0RZOHFnEtKpINRXZdBlKHkONOmYXvYag2HCba5fb2a3";
+const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
 
 const page = ref(1);
+const showPreloader = ref(false);
 
 const {
   data: tasks,
@@ -29,6 +31,13 @@ const {
 } = await useFetch(() => `http://localhost:8006/api/tasks?page=${page.value}`, {
   onRequest({ options }) {
     options.headers.set("Authorization", `Bearer ${token}`);
+    showPreloader.value = true;
+  },
+  onResponse({ request, response, options }) {
+    showPreloader.value = false;
+  },
+  onResponseError({ request, response, options }) {
+    showPreloader.value = false;
   },
 });
 

@@ -17,10 +17,12 @@
     "v-calendar": "^3.1.2",
     "vue": "latest",
     "vue-router": "latest",
-    "vue-select": "^4.0.0-beta.6"
+    "vue-select": "^4.0.0-beta.6",
+    "vue3-ui-preloader": "^1.0.4"
   },
   "devDependencies": {
     "@iconify-json/material-symbols": "^1.2.12",
+    "nuxt3-notifications": "^1.2.3",
     "sass": "^1.83.1"
   }
 }

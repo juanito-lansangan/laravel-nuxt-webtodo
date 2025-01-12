@@ -10,8 +10,7 @@
     </NuxtLink>
     <div class="card">
       <div class="card-title">
-        <h2 v-if="action == 'create'">Create Task</h2>
-        <h2 v-else>Update Task</h2>
+        <h2>{{ action == "create" ? "Create" : "Update" }} Task</h2>
       </div>
       <div class="card-body">
         <form class="form" action="">
@@ -65,35 +64,113 @@
               v-model="form.tags"
               taggable
               multiple
-              label="title"
+              :id="'tags-select'"
             />
           </div>
         </form>
       </div>
       <div class="card-footer">
-        <button class="btn btn-normal btn-primary">Create</button>
+        <button class="btn btn-normal btn-primary" @click="handleSubmit">
+          {{ action == "create" ? "Create" : "Update" }}
+        </button>
       </div>
     </div>
   </section>
 </template>
 <script setup>
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import { ref, reactive } from "vue";
+const { notify } = useNotification();
 
-defineProps({
+const props = defineProps({
   action: String,
+  task: Object,
+  tags: Object,
 });
 
-// const selectedDate = ref(null);
+const selectedDate = ref(props.task.due_date ?? new Date());
+
 const form = reactive({
-  title: "",
-  description: "",
-  priority: "",
-  due_date: null,
-  tags: "",
+  title: props.task.title ?? "",
+  description: props.task.description ?? "",
+  priority: props.task.priority ?? "",
+  due_date: props.task.due_date ?? null,
+  tags: [],
 });
 
-const tagOptions = ["laravel", "laracon", "vue", "nuxt"];
+if (props.task) {
+  form.tags = props.task.tags.map((item) => item.name);
+}
+
+const tagOptions = computed(() => {
+  return props.tags.data.map((item) => item.name);
+});
+
+const handleSubmit = () => {
+  if (form.due_date) {
+    const date = new Date(form.due_date);
+    const formattedDate = date.toISOString().split("T")[0];
+    form.due_date = formattedDate;
+  }
+
+  if (props.action == "create") {
+    createTask();
+    return;
+  }
+
+  const result = window.confirm("Are you sure you want to update this task?");
+
+  if (result) {
+    updateTask();
+  }
+};
+
+const createTask = async () => {
+  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+  const endpoint = `http://localhost:8006/api/tasks`;
+
+  const res = await $fetch(endpoint, {
+    method: "POST",
+    credentials: "include",
+    body: form,
+    onRequest({ options }) {
+      options.headers.set("Authorization", `Bearer ${token}`);
+    },
+  });
+
+  notify({
+    title: "Create Task",
+    text: "Task successfully created.",
+    type: "success", // Optional: 'success', 'error', 'warn', etc.
+  });
+
+  await navigateTo("/");
+  //   emit("refreshTasks");
+};
+
+const updateTask = async () => {
+  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+  const taskId = props.task.id;
+  const endpoint = `http://localhost:8006/api/tasks/${taskId}`;
+
+  const res = await $fetch(endpoint, {
+    method: "PUT",
+    credentials: "include",
+    body: form,
+    onRequest({ options }) {
+      options.headers.set("Authorization", `Bearer ${token}`);
+    },
+  });
+
+  notify({
+    title: "Update Task",
+    text: "Task successfully updated.",
+    type: "success", // Optional: 'success', 'error', 'warn', etc.
+  });
+
+  await navigateTo("/");
+  //   emit("refreshTasks");
+};
 </script>
 <style lang="scss" scoped>
 .task-form {
