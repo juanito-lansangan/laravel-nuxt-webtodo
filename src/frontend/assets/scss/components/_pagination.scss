@@ -1,6 +1,22 @@
+@use "../breakpoints" as *;
+
 .pagination {
   display: flex;
   gap: 4px;
   justify-content: center;
   margin-top: 35px;
+
+  &-mobile {
+    display: flex;
+    @include breakpoint(845px) {
+      display: none;
+    }
+  }
+
+  &-desktop {
+    display: none;
+    @include breakpoint(845px) {
+      display: flex;
+    }
+  }
 }

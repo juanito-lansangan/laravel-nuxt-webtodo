@@ -2,40 +2,45 @@
   <section class="container">
     <TaskFilter />
     <div class="task-cards">
-      <Card
-        v-for="cardItem in cardsItems"
-        :key="cardItem.id"
-        :card="cardItem"
+      <TaskCard
+        v-for="task in tasks.data"
+        :key="task.id"
+        :task="task"
+        @refreshTasks="refreshTasks"
       />
     </div>
-    <ul class="pagination">
-      <li v-for="page in 5" :key="`page-${page}`">
-        <NuxtLink class="btn-icon btn-normal btn-secondary" to="/tasks/create">
-          1
-        </NuxtLink>
-      </li>
-    </ul>
+    <!-- {{ tasks.data }} -->
+
+    <Pagination :pageData="tasks" @changePage="refetch" />
   </section>
 </template>
+
 <script setup>
-const cardsItems = [
-  {
-    id: 1,
+import { ref, watch } from "vue";
+
+const token = "1|PtcPH0RZOHFnEtKpINRXZdBlKHkONOmYXvYag2HCba5fb2a3";
+
+const page = ref(1);
+
+const {
+  data: tasks,
+  refresh,
+  clear,
+} = await useFetch(() => `http://localhost:8006/api/tasks?page=${page.value}`, {
+  onRequest({ options }) {
+    options.headers.set("Authorization", `Bearer ${token}`);
   },
-  {
-    id: 2,
-  },
-  {
-    id: 3,
-  },
-  {
-    id: 4,
-  },
-  {
-    id: 5,
-  },
-  {
-    id: 6,
-  },
-];
+});
+
+// Refetch tasks when page changes
+const refetch = (pageNumber) => {
+  if (pageNumber) {
+    page.value = pageNumber;
+  }
+  refresh();
+};
+
+const refreshTasks = () => {
+  refresh();
+};
 </script>
