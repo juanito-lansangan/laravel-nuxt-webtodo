@@ -164,7 +164,7 @@ const showConfirmRestore = () => {
 };
 
 const deleteTask = async () => {
-  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+  const token = localStorage.getItem("AUTH_TOKEN");
   const taskId = props.task.id;
   const endpoint = `http://localhost:8006/api/tasks/${taskId}`;
 
@@ -185,7 +185,7 @@ const deleteTask = async () => {
 };
 
 const completeTask = async () => {
-  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+  const token = localStorage.getItem("AUTH_TOKEN");
   const taskId = props.task.id;
   const endpoint = `http://localhost:8006/api/tasks/${taskId}/complete`;
 
@@ -207,7 +207,7 @@ const completeTask = async () => {
 };
 
 const inProgressTask = async () => {
-  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+  const token = localStorage.getItem("AUTH_TOKEN");
   const taskId = props.task.id;
   const endpoint = `http://localhost:8006/api/tasks/${taskId}/inprogress`;
 
@@ -229,7 +229,7 @@ const inProgressTask = async () => {
 };
 
 const archiveTask = async () => {
-  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+  const token = localStorage.getItem("AUTH_TOKEN");
   const taskId = props.task.id;
   const endpoint = `http://localhost:8006/api/tasks/${taskId}/archive`;
 
@@ -251,7 +251,7 @@ const archiveTask = async () => {
 };
 
 const restoreTask = async () => {
-  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+  const token = localStorage.getItem("AUTH_TOKEN");
   const taskId = props.task.id;
   const endpoint = `http://localhost:8006/api/tasks/${taskId}/restore`;
 

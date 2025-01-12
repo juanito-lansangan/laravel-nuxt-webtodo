@@ -147,3 +147,22 @@ test('creating a task with invalid files receive 422 response with error message
             ]
         ]);
 });
+
+test('creating task using the following requests should received 200 response', function() {
+    $user = User::factory()->create();
+    $token = $user->createToken($user->email)->plainTextToken;
+
+    $response = $this->withHeaders([
+        'Authorization' => "Bearer {$token}"
+    ])
+    ->postJson("/api/tasks", [
+        "description" => "Amet adipisicing cu the quick brown fox jumps over the lazy dog",
+        "due_date" => "2025-01-16",
+        "priority" => "4",
+        "tags" => ["erica", "sid"],
+        "title" => "Sint porro et odio ",
+    ]);
+
+
+    $response->assertStatus(201);
+});

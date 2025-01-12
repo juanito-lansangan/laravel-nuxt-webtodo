@@ -10,7 +10,7 @@
 <script setup>
 const { id } = useRoute().params;
 
-const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+const token = localStorage.getItem("AUTH_TOKEN");
 
 const { data: taskDetails } = await useAsyncData(
   `task-data-${id}`,

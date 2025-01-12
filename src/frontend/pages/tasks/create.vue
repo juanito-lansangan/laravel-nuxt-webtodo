@@ -1,13 +1,8 @@
 <template>
-  <!-- <TaskForm
-      :task="taskDetails.task.data"
-      :tags="taskDetails.tags"
-      action="create-task"
-    /> -->
   <TaskForm :tags="tags" action="create-task" />
 </template>
 <script setup>
-const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+const token = localStorage.getItem("AUTH_TOKEN");
 
 const page = ref(1);
 

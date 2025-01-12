@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TaskController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,10 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 
 Route::middleware('auth:sanctum')->group(function() {
+    Route::get('/user', function (Request $request) {
+        return new UserResource($request->user());
+    });
+
     Route::apiResource('tasks', TaskController::class);
     Route::patch('/tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete');
     Route::patch('/tasks/{task}/inprogress', [TaskController::class, 'inprogress'])->name('tasks.inprogress');

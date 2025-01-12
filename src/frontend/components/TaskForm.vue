@@ -26,24 +26,25 @@
             />
           </div>
           <div class="form-input-group">
-            <label class="form-label" for="title">Description</label>
+            <label class="form-label" for="description">Description</label>
             <textarea
               v-model="form.description"
               class="form-input-text"
               placeholder="Enter description"
               type="text"
-              name="title"
-              id="title"
+              name="description"
+              id="description"
               rows="4"
             ></textarea>
           </div>
 
           <div class="form-input-group">
-            <label class="form-label" for="title">Priority Level</label>
+            <label class="form-label" for="filterBy">Priority Level</label>
             <select
               v-model="form.priority"
               id="filterBy"
               class="form-select task-filter__filter-fields"
+              name="filterBy"
             >
               <option selected>Choose priority</option>
               <option value="4">Urgent</option>
@@ -53,18 +54,27 @@
             </select>
           </div>
           <div class="form-input-group">
-            <label class="form-label" for="title">Due Date</label>
+            <label class="form-label">Due Date</label>
             <VueDatePicker v-model="form.due_date" format="MM/dd/yyyy" />
           </div>
 
           <div class="form-input-group">
-            <label class="form-label" for="title">Tags</label>
+            <label class="form-label">Tags</label>
             <VueSelect
-                :options="tagOptions"
-                v-model="form.tags"
-                taggable
-                multiple
-                :id="'tags-select'"
+              :options="tagOptions"
+              v-model="form.tags"
+              taggable
+              multiple
+              :id="'tags-select'"
+            />
+          </div>
+          <div class="form-input-group">
+            <label class="form-label" for="title">Attachments</label>
+            <input
+              class="form-input-file"
+              type="file"
+              multiple
+              @change="onChangeFileInput"
             />
           </div>
         </form>
@@ -88,20 +98,27 @@ const props = defineProps({
 });
 
 const form = reactive({
-  title: '',
-  description: '',
+  title: "",
+  description: "",
   priority: 1,
   due_date: null,
   tags: [],
+  //   attachments: [],
 });
 
 if (props.task) {
   form.tags = props.task.tags.map((item) => item.name);
-  form.title = props.task.title
-  form.description = props.task.description
-  form.priority = props.task.priority
-  form.due_date = props.task.due_date
+  form.title = props.task.title;
+  form.description = props.task.description;
+  form.priority = props.task.priority;
+  form.due_date = props.task.due_date;
+  //   form.attachments = [];
 }
+
+const onChangeFileInput = (e) => {
+  console.log(e.target.files);
+  //   form.attachments = e.target.files;
+};
 
 const tagOptions = computed(() => {
   return props.tags.data.map((item) => item.name);
@@ -113,9 +130,22 @@ const handleSubmit = () => {
     const formattedDate = date.toISOString().split("T")[0];
     form.due_date = formattedDate;
   }
+  /* 
+  const formData = new FormData();
+
+  for (let file in form.attachments) {
+    formData.append("attachments[]", file);
+  }
+
+  formData.append("title", form.title);
+  formData.append("description", form.description);
+  formData.append("priority", form.priority);
+  formData.append("due_date", form.due_date);
+  formData.append("tags", form.tags); */
 
   if (props.action == "create-task") {
-    createTask();
+    // createTask(formData);
+    createTask(form);
     return;
   }
 
@@ -126,8 +156,8 @@ const handleSubmit = () => {
   }
 };
 
-const createTask = async () => {
-  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+const createTask = async (form) => {
+  const token = localStorage.getItem("AUTH_TOKEN");
   const endpoint = `http://localhost:8006/api/tasks`;
 
   const res = await $fetch(endpoint, {
@@ -136,6 +166,7 @@ const createTask = async () => {
     body: form,
     onRequest({ options }) {
       options.headers.set("Authorization", `Bearer ${token}`);
+      //   options.headers.set("Content-Type", "multipart/form-data");
     },
   });
 
@@ -150,7 +181,7 @@ const createTask = async () => {
 };
 
 const updateTask = async () => {
-  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+  const token = localStorage.getItem("AUTH_TOKEN");
   const taskId = props.task.id;
   const endpoint = `http://localhost:8006/api/tasks/${taskId}`;
 

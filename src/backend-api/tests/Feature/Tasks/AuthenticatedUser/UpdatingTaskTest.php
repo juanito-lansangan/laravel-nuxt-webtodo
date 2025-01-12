@@ -124,3 +124,28 @@ test('editing a task I do not own receive 401 response', function() {
 
     $response->assertStatus(401);
 });
+
+
+test('update task using the following requests should received 200 response', function() {
+    $task = Task::factory()->create();
+    $user = User::factory()
+    ->create();
+    
+    $user->tasks()->save($task);
+
+    $token = $user->createToken($user->email)->plainTextToken;
+
+    $response = $this->withHeaders([
+        'Authorization' => "Bearer {$token}"
+    ])
+    ->putJson("/api/tasks/{$task->id}", [
+        "description" => "Amet adipisicing cu the quick brown fox jumps over the lazy dog",
+        "due_date" => "2025-01-16",
+        "priority" => "4",
+        "tags" => ["erica", "sid"],
+        "title" => "Sint porro et odio ",
+    ]);
+
+
+    $response->assertStatus(200);
+});

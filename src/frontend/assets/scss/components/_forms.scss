@@ -21,6 +21,25 @@
   font-weight: 550;
 }
 
+.form-input-file {
+  font-size: $font-size-md;
+
+  &::file-selector-button {
+    margin-right: 10px;
+    font-weight: bold;
+    // color: dodgerblue;
+    padding: 0.5em;
+    // border: thin solid grey;
+    // border-radius: 3px;
+
+    border: 2px solid $light-gray;
+    border-radius: 6px;
+    font-size: $font-size-md;
+    padding: 12px;
+    font-weight: 550;
+  }
+}
+
 .form-input-textarea {
   border: 2px solid $light-gray;
   display: block;

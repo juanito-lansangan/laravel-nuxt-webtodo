@@ -1,11 +1,22 @@
 <template>
-  <section class="container login-wrapper">
+  <section class="container signup-wrapper">
     <div class="card card-md">
       <div class="card-title">
-        <h2>Login</h2>
+        <h2>Signup</h2>
       </div>
       <div class="card-body">
-        <form class="form" @submit.prevent="submitForm">
+        <form @submit.prevent="registerUser">
+          <div class="form-input-group">
+            <label class="form-label" for="title">Name</label>
+            <input
+              class="form-input-text"
+              placeholder="Enter name"
+              type="text"
+              name="name"
+              id="name"
+              v-model="form.name"
+            />
+          </div>
           <div class="form-input-group">
             <label class="form-label" for="title">Email</label>
             <input
@@ -28,15 +39,29 @@
               v-model="form.password"
             />
           </div>
+          <div class="form-input-group">
+            <label class="form-label" for="title">Password Confirmation</label>
+            <input
+              class="form-input-text"
+              placeholder="Enter password"
+              type="password"
+              name="password_confirmation"
+              id="password_confirmation"
+              v-model="form.password_confirmation"
+            />
+          </div>
           <div class="btn-actions">
-            <NuxtLink class="btn-actions__link" to="/signup">
-              Create account
-            </NuxtLink>
+            <span>
+              Already have an account
+              <NuxtLink class="btn-actions__link" to="/login">
+                signin?
+              </NuxtLink>
+            </span>
             <button
               type="submit"
               class="btn btn-md btn-primary btn-actions__signup"
             >
-              Login
+              Signup
             </button>
           </div>
         </form>
@@ -45,21 +70,32 @@
   </section>
 </template>
 <script setup>
+import { FetchError } from "ofetch";
+
 definePageMeta({
   layout: "guest",
   middleware: ["$guest"],
 });
 
-const { login } = useSanctum();
+const { refreshUser } = useSanctum();
 
-const form = reactive({
-  email: "johndoe@example.com",
-  password: "Secret123!",
+const form = useSanctumForm("post", "/api/register", {
+  name: "",
+  email: "",
+  password: "",
+  password_confirmation: "",
 });
 
-const submitForm = async () => {
-  await login(form);
-};
+async function registerUser() {
+  if (form.processing) return;
+  try {
+    await form.submit();
+    await refreshUser();
+    return navigateTo("/");
+  } catch (err) {
+    console.log(err);
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -88,7 +124,5 @@ const submitForm = async () => {
     margin-left: 6px;
     font-size: 14px;
   }
-}
-.login-wrapper {
 }
 </style>

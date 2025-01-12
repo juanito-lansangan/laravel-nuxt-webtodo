@@ -9,7 +9,13 @@
         @refreshTasks="refreshTasks"
       />
     </div>
-    <!-- {{ tasks.data }} -->
+    <!-- <pre>
+
+        {{ user }}
+    </pre>
+    <pre>
+        {{ isLoggedIn }}
+    </pre> -->
 
     <Pagination :pageData="tasks" @changePage="refetch" />
     <Preloader v-if="showPreloader" />
@@ -17,9 +23,10 @@
 </template>
 
 <script setup>
+// const { isLoggedIn, user } = useSanctum();
 import { ref } from "vue";
 
-const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+const token = localStorage.getItem("AUTH_TOKEN");
 
 const page = ref(1);
 const showPreloader = ref(false);

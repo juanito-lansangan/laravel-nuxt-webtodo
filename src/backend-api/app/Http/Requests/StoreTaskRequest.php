@@ -29,7 +29,6 @@ class StoreTaskRequest extends FormRequest
             'priority' => [Rule::enum(TaskPriority::class)],
             'due_date' => ['nullable', 'date', 'date_format:Y-m-d', 'after_or_equal:today'],
             'tags' => ['nullable', 'array'],
-            'tags.*' => ['string', 'exists:tags,name'],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => ['file', 'mimes:svg,png,jpg,mp4,csv,txt,doc,docx', 'max:10240']
         ];

@@ -29,7 +29,6 @@ class UpdateTaskRequest extends FormRequest
             'priority' => [Rule::enum(TaskPriority::class)],
             'due_date' => ['nullable', 'date', 'date_format:Y-m-d', 'after_or_equal:today'],
             'tags' => ['nullable', 'array'],
-            'tags.*' => ['string', 'exists:tags,name'],
         ];
     }
 }

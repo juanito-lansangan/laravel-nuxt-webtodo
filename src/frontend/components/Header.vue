@@ -11,8 +11,17 @@
           />
           New Task
         </NuxtLink>
-        <button class="btn btn-normal btn-primary">Logout</button>
+        <button class="btn btn-normal btn-primary" @click="logoutUser">
+          Logout
+        </button>
       </div>
     </nav>
   </header>
 </template>
+
+<script setup>
+const { isLoggedIn, user, logout } = useSanctum();
+const logoutUser = () => logout();
+
+// navigateTo("/login");
+</script>
