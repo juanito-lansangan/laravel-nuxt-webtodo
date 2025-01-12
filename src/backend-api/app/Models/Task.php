@@ -33,6 +33,7 @@ class Task extends Model
         'completed_at' => 'completed',
         'priority' => 'priority level',
         'due_date' => 'due date',
+        'archived_at' => 'archive date',
     ];
 
     // valid date filters
@@ -89,7 +90,6 @@ class Task extends Model
 
     public function scopeSort(Builder $query, $request)
     {
-        // Log::info([$request->sort_by, array_keys($this->sortItems)]);
         return $query->when(in_array($request->sort_by ?? 'created_at', array_keys($this->sortOptions)),
             function ($query) use ($request) {
                 $query->orderBy($request->sort_by ?? 'created_at', $request->sort_order ?? 'DESC');

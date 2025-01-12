@@ -1,6 +1,5 @@
 <template>
   <section class="container">
-    <!-- <TaskFilter @filterTasks="filterTasks" /> -->
     <div class="task-filter">
       <div class="task-filter__search-wrapper">
         <label for="search" class="task-filter__search">
@@ -31,29 +30,42 @@
             <select
               id="filterBy"
               class="form-select task-filter__filter-fields"
-              @change="filterChange"
+              v-model="filterField"
             >
               <option value="">Filter By</option>
               <option value="completed_at">Completed</option>
               <option value="priority">Priority</option>
               <option value="due_date">Due Date</option>
-              <option value="archive_at">Archive</option>
+              <option value="archived_at">Archive</option>
             </select>
           </div>
 
-          <div class="task-filter__select-item">
+          <div
+            class="task-filter__select-item"
+            v-if="filterField === 'priority'"
+          >
             <select
-              id="sortBy"
-              class="form-select task-filter__sort"
-              @change="filterChange"
-              v-model="sortField"
+              id="filterByPriority"
+              class="form-select task-filter__filter-fields"
+              v-model="filterFieldPriority"
+              @change="refreshTasks"
             >
-              <option value="">Sort By</option>
-              <option value="created_at">Created</option>
-              <option value="completed_at">Completed</option>
-              <option value="priority">Priority</option>
-              <option value="due_date">Due Date</option>
+              <option value="">Select Priority</option>
+              <option value="4">Urgent</option>
+              <option value="3">High</option>
+              <option value="2">Normal</option>
+              <option value="1">Low</option>
             </select>
+          </div>
+
+          <div class="task-filter__select-item task-filter__daterange" v-else>
+            <VueDatePicker
+              placeholder="Select Date Range"
+              range
+              format="MM/dd/yyyy"
+              @update:model-value="handleDate"
+              v-model="dateRange"
+            />
           </div>
 
           <div class="task-filter__select-item">
@@ -61,7 +73,7 @@
               id="sortOrder"
               class="form-select task-filter__sort-order"
               v-model="sortOrder"
-              @change="filterChange"
+              @change="refreshTasks"
             >
               <option value="">Sort Order</option>
               <option value="asc">ASC</option>
@@ -79,13 +91,6 @@
         @refreshTasks="refreshTasks"
       />
     </div>
-    <!-- <pre>
-
-        {{ user }}
-    </pre>
-    <pre>
-        {{ isLoggedIn }}
-    </pre> -->
 
     <Pagination :pageData="tasks" @changePage="refetch" />
     <Preloader v-if="showPreloader" />
@@ -93,7 +98,6 @@
 </template>
 
 <script setup>
-// const { isLoggedIn, user } = useSanctum();
 import { ref, reactive } from "vue";
 import { debounce } from "lodash";
 const token = localStorage.getItem("AUTH_TOKEN");
@@ -101,18 +105,15 @@ const token = localStorage.getItem("AUTH_TOKEN");
 const page = ref(1);
 const showPreloader = ref(false);
 
-const sortOptions = [
-  { key: "title", label: "title" },
-  { key: "description", label: "description" },
-  { key: "created_at", label: "created at" },
-  { key: "completed_at", label: "completed" },
-  { key: "priority", label: "priority level" },
-  { key: "due_date", label: "due date" },
-];
-
 const search = ref("");
-const sortField = ref("");
 const sortOrder = ref("");
+const filterField = ref("");
+const filterFieldPriority = ref("");
+const dateFrom = ref("");
+const dateTo = ref("");
+const dateRange = ref("");
+
+const baseUrl = "http://localhost:8006/api/tasks";
 
 const {
   data: tasks,
@@ -120,7 +121,7 @@ const {
   clear,
 } = await useFetch(
   () =>
-    `http://localhost:8006/api/tasks?page=${page.value}&search=${search.value}&sort_by=${sortField.value}&sort_order=${sortOrder.value}`,
+    `${baseUrl}?page=${page.value}&search=${search.value}&date_filter=${filterField.value}&dateFrom=${dateFrom.value}&dateTo=${dateTo.value}&priority=${filterFieldPriority.value}&sort_by=${filterField.value}&sort_order=${sortOrder.value}`,
   {
     onRequest({ options }) {
       options.headers.set("Authorization", `Bearer ${token}`);
@@ -154,10 +155,12 @@ const refreshTasks = () => {
   refresh();
 };
 
-const filterChange = () => {
-  //   if (type === 'sortfield') {
-  console.log(sortField.value);
-  //   }
+const handleDate = (modelData) => {
+  const dateFrom = new Date(modelData[0]);
+  const dateTo = new Date(modelData[1]);
+  dateFrom.value = dateFrom.toISOString().split("T")[0];
+  dateTo.value = dateTo.toISOString().split("T")[0];
+  console.log([dateFrom.value, dateTo.value]);
   refresh();
 };
 </script>

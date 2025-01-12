@@ -8,9 +8,12 @@
   margin-bottom: 24px;
   margin-top: 25px;
 
-  @include lg {
-    flex-direction: row;
-  }
+  //   @include breakpoint(1036px) {
+  //     flex-direction: row;
+  //   }
+  //   @include lg {
+  //     flex-direction: row;
+  //   }
 
   @include xl {
     justify-content: center;
@@ -78,6 +81,20 @@
       flex-direction: row;
       flex: 1;
     }
+  }
+}
+
+.task-filter__daterange {
+  flex: 2;
+  .dp__input {
+    border: 2px solid $light-gray;
+    display: block;
+    border-radius: 6px;
+    font-size: $font-size-md;
+    font-weight: 500;
+    padding: 8px;
+    padding-left: 40px;
+    font-weight: 550;
   }
 }
 
