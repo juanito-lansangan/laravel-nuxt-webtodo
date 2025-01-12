@@ -10,7 +10,7 @@
     </NuxtLink>
     <div class="card">
       <div class="card-title">
-        <h2>{{ action == "create" ? "Create" : "Update" }} Task</h2>
+        <h2>{{ action == "create-task" ? "Create" : "Update" }} Task</h2>
       </div>
       <div class="card-body">
         <form class="form" action="">
@@ -71,14 +71,13 @@
       </div>
       <div class="card-footer">
         <button class="btn btn-normal btn-primary" @click="handleSubmit">
-          {{ action == "create" ? "Create" : "Update" }}
+          {{ action == "create-task" ? "Create" : "Update" }}
         </button>
       </div>
     </div>
   </section>
 </template>
 <script setup>
-// import { format } from "date-fns";
 import { ref, reactive } from "vue";
 const { notify } = useNotification();
 
@@ -89,15 +88,19 @@ const props = defineProps({
 });
 
 const form = reactive({
-  title: props.task.title ?? "",
-  description: props.task.description ?? "",
-  priority: props.task.priority ?? "",
-  due_date: props.task.due_date ?? null,
+  title: '',
+  description: '',
+  priority: '',
+  due_date: null,
   tags: [],
 });
 
 if (props.task) {
   form.tags = props.task.tags.map((item) => item.name);
+  form.title = props.task.title
+  form.description = props.task.description
+  form.priority = props.task.priority
+  form.due_date = props.task.due_date
 }
 
 const tagOptions = computed(() => {
@@ -111,7 +114,7 @@ const handleSubmit = () => {
     form.due_date = formattedDate;
   }
 
-  if (props.action == "create") {
+  if (props.action == "create-task") {
     createTask();
     return;
   }
