@@ -1,11 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    ssr: false,
     compatibilityDate: '2024-11-01',
     devtools: { enabled: true },
     css: [
         '~/assets/scss/main.scss',
     ],
-    modules: ['@nuxt/icon', 'nuxt3-notifications'],
+    modules: [
+        '@nuxt/icon',
+        'nuxt3-notifications',
+    ],
     runtimeConfig: ({
         API_URL: 'http://localhost:8006',
         public: {

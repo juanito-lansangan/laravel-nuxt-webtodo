@@ -60,11 +60,11 @@
           <div class="form-input-group">
             <label class="form-label" for="title">Tags</label>
             <VueSelect
-              :options="tagOptions"
-              v-model="form.tags"
-              taggable
-              multiple
-              :id="'tags-select'"
+                :options="tagOptions"
+                v-model="form.tags"
+                taggable
+                multiple
+                :id="'tags-select'"
             />
           </div>
         </form>
@@ -87,8 +87,6 @@ const props = defineProps({
   task: Object,
   tags: Object,
 });
-
-const selectedDate = ref(props.task.due_date ?? new Date());
 
 const form = reactive({
   title: props.task.title ?? "",
