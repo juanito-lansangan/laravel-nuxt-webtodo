@@ -40,7 +40,7 @@ test('updating a task as an authenticated user with tags receive 200 response', 
     $user->tasks()->save($task);
 
     $tags = Tag::factory(3)->create();
-    $tagsId = $tags->pluck('id')->toArray();
+    $tagNames = $tags->pluck('name')->toArray();
 
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$token}",
@@ -48,10 +48,11 @@ test('updating a task as an authenticated user with tags receive 200 response', 
     ->putJson("/api/tasks/{$task->id}", [
         'title' => 'update task',
         'description' => 'update description',
-        'tags' => $tagsId
+        'tags' => $tagNames
     ]);
 
     $responseTask = $response->json();
+
     expect($responseTask['data']['tags'])->toHaveCount(3);
 
     $response

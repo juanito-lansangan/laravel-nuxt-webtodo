@@ -40,4 +40,14 @@ class TaskFactory extends Factory
             'archived_at' => now(),
         ]);
     }
+
+    public function randomPriority(): static 
+    {
+        $statuses = TaskPriority::cases();
+        $status = $statuses[array_rand($statuses)];
+        
+        return $this->state([
+            'priority' => $status,
+        ]);
+    }
 }

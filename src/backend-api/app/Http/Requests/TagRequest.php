@@ -23,7 +23,7 @@ class TagRequest extends FormRequest
     {
         return [
             'tags' => ['required', 'array'],
-            'tags.*' => ['integer', 'exists:tags,id']
+            'tags.*' => ['string', 'exists:tags,name'],
         ];
     }
 }

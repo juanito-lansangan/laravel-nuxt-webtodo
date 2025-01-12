@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class Task extends Model
 {
@@ -22,6 +23,24 @@ class Task extends Model
         'due_date',
         'archived_at',
         'completed_at',
+    ];
+
+    // valid sort items
+    private $sortItems = [
+        'title' => 'title',
+        'description' => 'description',
+        'created_at' => 'created at',
+        'completed_at' => 'completed',
+        'priority' => 'priority level',
+        'due_date' => 'due date',
+    ];
+
+    // valid date filters
+    private $dateFilters = [
+        'due_date',
+        'completed_at',
+        'archived_at',
+        'created_at',
     ];
 
     public function casts(): array
@@ -49,7 +68,7 @@ class Task extends Model
         return $this->hasMany(Attachment::class);
     }
 
-    public function scopeFilter(Builder $query, $request, $search, $dateFilters)
+    public function scopeFilter(Builder $query, $request, $search)
     {
         return $query->where(function ($query) use ($search) {
             $query
@@ -59,7 +78,7 @@ class Task extends Model
         ->when($request->priority, function ($query, $filter) {
             $query->where('priority', $filter);
         })
-        ->when($request->date_filter && in_array($request->date_filter, $dateFilters) && $request->date_from && $request->date_to,
+        ->when($request->date_filter && in_array($request->date_filter, $this->dateFilters) && $request->date_from && $request->date_to,
             function ($query) use ($request) {
                 $query
                     ->whereDate($request->date_filter, '>=', $request->date_from)
@@ -68,11 +87,12 @@ class Task extends Model
         );
     }
 
-    public function scopeSort(Builder $query, $request, $sortItems)
+    public function scopeSort(Builder $query, $request)
     {
-        return $query->when($request->sort_by && in_array($request->sort_by, array_keys($sortItems)),
+        // Log::info([$request->sort_by, array_keys($this->sortItems)]);
+        return $query->when(in_array($request->sort_by ?? 'created_at', array_keys($this->sortItems)),
             function ($query) use ($request) {
-                $query->orderBy($request->sort_by, $request->sort_order ?? 'ASC');
+                $query->orderBy($request->sort_by ?? 'created_at', $request->sort_order ?? 'DESC');
             }
         );
     }

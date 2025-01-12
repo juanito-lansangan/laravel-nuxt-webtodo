@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\TagRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
+use App\Models\Tag;
 use App\Models\Task;
 use App\Services\FileAttachmentService;
 use Illuminate\Http\JsonResponse;
@@ -22,30 +23,13 @@ class TaskController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        // valid sort items
-        $sortItems = [
-            'title' => 'title',
-            'description' => 'description',
-            'created_at' => 'created at',
-            'completed_at' => 'completed',
-            'priority' => 'priority level',
-            'due_date' => 'due date',
-        ];
-
-        // valid date filters
-        $dateFilters = [
-            'due_date',
-            'completed_at',
-            'archived_at',
-            'created_at',
-        ];
-
         $search = $request->search;
 
         $data = $request->user()->tasks()
-        ->filter($request, $search, $dateFilters)
-        ->sort($request, $sortItems)
-        ->paginate(10);
+        ->filter($request, $search)
+        ->sort($request)
+        ->paginate(6)
+        ->withQueryString();
 
         return TaskResource::collection($data);
     }
@@ -60,7 +44,8 @@ class TaskController extends Controller
         $task = $request->user()->tasks()->create($fields);
 
         if ($request->tags) {
-            $task->tags()->sync($request->tags);
+            $tags = Tag::whereIn('name', $request->tags)->get();
+            $task->tags()->sync($tags);
         }
 
         if ($request->attachments) {
@@ -92,7 +77,8 @@ class TaskController extends Controller
         $task->update($fields);
 
         if ($request->tags) {
-            $task->tags()->sync($request->tags);
+            $tags = Tag::whereIn('name', $request->tags)->get();
+            $task->tags()->sync($tags);
         }
 
         return TaskResource::make($task);
@@ -125,9 +111,9 @@ class TaskController extends Controller
     }
 
     /**
-     * Mark a task as incomplete
+     * Mark a task as inprogress
      */
-    public function incomplete(Task $task): TaskResource
+    public function inprogress(Task $task): TaskResource
     {
         Gate::authorize('viewOrModify', $task);
 
@@ -171,7 +157,9 @@ class TaskController extends Controller
     {
         Gate::authorize('viewOrModify', $task);
 
-        $task->tags()->sync($request->tags);
+        $tags = Tag::whereIn('name', $request->tags)->get();
+
+        $task->tags()->sync($tags);
         
         return TaskResource::make($task);
     }

@@ -13,7 +13,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('tasks', TaskController::class);
     Route::patch('/tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete');
-    Route::patch('/tasks/{task}/incomplete', [TaskController::class, 'incomplete'])->name('tasks.incomplete');
+    Route::patch('/tasks/{task}/inprogress', [TaskController::class, 'inprogress'])->name('tasks.inprogress');
     Route::patch('/tasks/{task}/archive', [TaskController::class, 'archive'])->name('tasks.archive');
     Route::patch('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
     Route::patch('/tasks/{task}/tags', [TaskController::class, 'addTags'])->name('tasks.addtags');

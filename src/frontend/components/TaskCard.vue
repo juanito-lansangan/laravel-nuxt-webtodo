@@ -263,6 +263,12 @@ const restoreTask = async () => {
     },
   });
 
+  notify({
+    title: "Restore Task",
+    text: "Task successfully restored.",
+    type: "success",
+  });
+
   emit("refreshTasks");
 };
 </script>

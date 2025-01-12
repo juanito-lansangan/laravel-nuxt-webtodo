@@ -34,7 +34,7 @@ test('creating a task as an authenticated user with tags receive 200 response', 
     $token = $user->createToken($user->email)->plainTextToken;
 
     $tags = Tag::factory(3)->create();
-    $tagsId = $tags->pluck('id')->toArray();
+    $tags = $tags->pluck('name')->toArray();
 
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$token}",
@@ -44,7 +44,7 @@ test('creating a task as an authenticated user with tags receive 200 response', 
         'description' => 'test description',
         'due_date' => now()->addDays(5)->format('Y-m-d'),
         'priority' => TaskPriority::Urgent,
-        'tags' => $tagsId
+        'tags' => $tags
     ]);
 
     $responseTask = $response->json();

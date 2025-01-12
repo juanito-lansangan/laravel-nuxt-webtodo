@@ -12,13 +12,13 @@ test('adding valid tags to a task receive 200 response with the task data that i
     $user->tasks()->save($task);
 
     $tags = Tag::factory(2)->create();
-    $tagsId = $tags->pluck('id')->toArray();
+    $tags = $tags->pluck('name')->toArray();
 
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$token}"
     ])
     ->patchJson("/api/tasks/{$task->id}/tags", [
-        'tags' => $tagsId
+        'tags' => $tags
     ]);
 
     $responseTask = $response->json();
@@ -69,7 +69,7 @@ test('adding non-existing tags receive 422 with error messages', function () {
         'Authorization' => "Bearer {$token}"
     ])
     ->patchJson("/api/tasks/{$task->id}/tags", [
-        'tags' => [1,2,3]
+        'tags' => ['laravel','vue','nuxt']
     ]);
 
     $response
@@ -117,13 +117,13 @@ test('adding tags to a task I do not own receive 401 response', function() {
     $otherUserToken = $otherUser->createToken($otherUser->email)->plainTextToken;
 
     $tags = Tag::factory(3)->create();
-    $tagsId = $tags->pluck('id')->toArray();
+    $tags = $tags->pluck('name')->toArray();
 
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$otherUserToken}"
     ])
     ->patchJson("/api/tasks/{$task->id}/tags", [
-        'tags' => $tagsId
+        'tags' => $tags
     ]);
 
     $response->assertStatus(401);

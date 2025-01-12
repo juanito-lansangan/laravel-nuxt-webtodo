@@ -3,7 +3,7 @@
 use App\Models\Task;
 use App\Models\User;
 
-test('marking a task as incomplete receive 200 response with the updated task data', function() {
+test('marking a task as inprogress receive 200 response with the updated task data', function() {
     $user = User::factory()->create();
     $task = Task::factory()->completed()->create();
 
@@ -18,7 +18,7 @@ test('marking a task as incomplete receive 200 response with the updated task da
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$token}"
     ])
-    ->patchJson("/api/tasks/{$task->id}/incomplete");
+    ->patchJson("/api/tasks/{$task->id}/inprogress");
 
     $responseTask = $response->json();
 
@@ -30,7 +30,7 @@ test('marking a task as incomplete receive 200 response with the updated task da
         ->assertJson($responseTask);
 });
 
-test('marking a task as incomplete that I do not own receive 401 response', function() {
+test('marking a task as inprogress that I do not own receive 401 response', function() {
     $userOwnerOfTask = User::factory()->create();
     $otherUser = User::factory()->create();
 
@@ -42,7 +42,7 @@ test('marking a task as incomplete that I do not own receive 401 response', func
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$otherUserToken}"
     ])
-    ->patchJson("/api/tasks/{$task->id}/incomplete");
+    ->patchJson("/api/tasks/{$task->id}/inprogress");
 
     $response->assertStatus(401);
 });

@@ -116,15 +116,15 @@ completed, I want to receive a 401 response.
 
 ---
 
-## [Authenticated User can mark a task as incomplete]
+## [Authenticated User can mark a task as inprogress]
 
-✅ When marking a task as incomplete, I want to
+✅ When marking a task as inprogress, I want to
 receive a 200 response with the updated task
 data.
 ✅ Date completed is set to NULL.
 
 ✅ When marking a task I do not own as
-incomplete, I want to receive a 401 response.
+inprogress, I want to receive a 401 response.
 
 ---
 
