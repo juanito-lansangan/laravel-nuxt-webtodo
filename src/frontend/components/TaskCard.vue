@@ -63,7 +63,13 @@
         >
           Mark as Complete
         </button>
-        <button class="btn btn-sm btn-warning" v-else>In-progress</button>
+        <button
+          class="btn btn-sm btn-warning"
+          v-else
+          @click="showConfirmInprogress"
+        >
+          Mark as In-progress
+        </button>
         <!-- toggle -->
 
         <button
@@ -92,6 +98,7 @@
 <script setup>
 const emit = defineEmits(["refreshTasks"]);
 
+const { notify } = useNotification();
 const props = defineProps({
   task: Object,
 });
@@ -130,6 +137,16 @@ const showConfirmComplete = () => {
   }
 };
 
+const showConfirmInprogress = () => {
+  const result = window.confirm(
+    "Are you sure you want to inprogress this task?"
+  );
+
+  if (result) {
+    inProgressTask();
+  }
+};
+
 const showConfirmArchive = () => {
   const result = window.confirm("Are you sure you want to archive this task?");
 
@@ -159,6 +176,11 @@ const deleteTask = async () => {
     },
   });
 
+  notify({
+    title: "Delete Task",
+    text: "Task successfully deleted.",
+    type: "success",
+  });
   emit("refreshTasks");
 };
 
@@ -175,6 +197,34 @@ const completeTask = async () => {
     },
   });
 
+  notify({
+    title: "Mark completed Task",
+    text: "Task successfully mark as completed.",
+    type: "success",
+  });
+
+  emit("refreshTasks");
+};
+
+const inProgressTask = async () => {
+  const token = "1|Jb86zkblWTTr8IsfVQsc26ZgrcoASiVDsUxsXhkAf1d7db29";
+  const taskId = props.task.id;
+  const endpoint = `http://localhost:8006/api/tasks/${taskId}/inprogress`;
+
+  const res = await $fetch(endpoint, {
+    method: "PATCH",
+    credentials: "include",
+    onRequest({ options }) {
+      options.headers.set("Authorization", `Bearer ${token}`);
+    },
+  });
+
+  notify({
+    title: "Mark completed Task",
+    text: "Task successfully mark as inprogress.",
+    type: "success",
+  });
+
   emit("refreshTasks");
 };
 
@@ -189,6 +239,12 @@ const archiveTask = async () => {
     onRequest({ options }) {
       options.headers.set("Authorization", `Bearer ${token}`);
     },
+  });
+
+  notify({
+    title: "Archived Task",
+    text: "Task successfully archived.",
+    type: "success",
   });
 
   emit("refreshTasks");
