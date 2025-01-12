@@ -11,7 +11,7 @@
           />
           New Task
         </NuxtLink>
-        <button class="btn btn-normal btn-primary" @click="logoutUser">
+        <button class="btn btn-normal btn-primary" @click="handleLogout">
           Logout
         </button>
       </div>
@@ -21,7 +21,10 @@
 
 <script setup>
 const { isLoggedIn, user, logout } = useSanctum();
-const logoutUser = () => logout();
+// const logoutUser = () => logout();
 
-// navigateTo("/login");
+const handleLogout = async () => {
+  await logout();
+  navigateTo("/login");
+};
 </script>
