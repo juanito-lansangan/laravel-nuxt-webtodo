@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@iconify-json/material-symbols": "^1.2.12",
+    "lodash": "^4.17.21",
     "nuxt3-notifications": "^1.2.3",
     "sass": "^1.83.1"
   }

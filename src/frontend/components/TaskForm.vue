@@ -103,7 +103,7 @@ const form = reactive({
   priority: 1,
   due_date: null,
   tags: [],
-  //   attachments: [],
+  attachments: [],
 });
 
 if (props.task) {
@@ -112,12 +112,12 @@ if (props.task) {
   form.description = props.task.description;
   form.priority = props.task.priority;
   form.due_date = props.task.due_date;
-  //   form.attachments = [];
+  // form.attachments = [];
 }
 
 const onChangeFileInput = (e) => {
   console.log(e.target.files);
-  //   form.attachments = e.target.files;
+  form.attachments = e.target.files;
 };
 
 const tagOptions = computed(() => {
@@ -130,7 +130,7 @@ const handleSubmit = () => {
     const formattedDate = date.toISOString().split("T")[0];
     form.due_date = formattedDate;
   }
-  /* 
+
   const formData = new FormData();
 
   for (let file in form.attachments) {
@@ -141,7 +141,7 @@ const handleSubmit = () => {
   formData.append("description", form.description);
   formData.append("priority", form.priority);
   formData.append("due_date", form.due_date);
-  formData.append("tags", form.tags); */
+  formData.append("tags", form.tags);
 
   if (props.action == "create-task") {
     // createTask(formData);

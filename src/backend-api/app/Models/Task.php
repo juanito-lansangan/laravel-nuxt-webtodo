@@ -26,7 +26,7 @@ class Task extends Model
     ];
 
     // valid sort items
-    private $sortItems = [
+    private $sortOptions = [
         'title' => 'title',
         'description' => 'description',
         'created_at' => 'created at',
@@ -90,7 +90,7 @@ class Task extends Model
     public function scopeSort(Builder $query, $request)
     {
         // Log::info([$request->sort_by, array_keys($this->sortItems)]);
-        return $query->when(in_array($request->sort_by ?? 'created_at', array_keys($this->sortItems)),
+        return $query->when(in_array($request->sort_by ?? 'created_at', array_keys($this->sortOptions)),
             function ($query) use ($request) {
                 $query->orderBy($request->sort_by ?? 'created_at', $request->sort_order ?? 'DESC');
             }
