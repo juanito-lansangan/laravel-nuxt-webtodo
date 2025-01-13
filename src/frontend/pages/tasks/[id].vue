@@ -31,4 +31,8 @@ const { data: taskDetails } = await useAsyncData(
     return { task, tags };
   }
 );
+
+definePageMeta({
+  middleware: ["$auth"],
+});
 </script>

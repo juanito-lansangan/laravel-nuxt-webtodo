@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
@@ -30,6 +31,15 @@ class TaskController extends Controller
         ->sort($request)
         ->paginate(6)
         ->withQueryString();
+
+        $debug = $request->user()->tasks()
+        ->filter($request, $search)
+        ->sort($request)
+        // ->paginate(6)
+        ->toSql();
+
+        Log::info($request->all());
+        Log::info($debug);
 
         return TaskResource::collection($data);
     }

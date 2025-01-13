@@ -83,13 +83,20 @@
         </div>
       </div>
     </div>
-    <div class="task-cards">
-      <TaskCard
-        v-for="task in tasks.data"
-        :key="task.id"
-        :task="task"
-        @refreshTasks="refreshTasks"
-      />
+    <div class="tasks-container">
+      <div class="empty-tasks" v-if="!tasks.data">
+        <h2>No Tasks Found</h2>
+        <p>You can add tasks here</p>
+        <NuxtLink class="btn btn-sm" to="/tasks/create">Add New Task</NuxtLink>
+      </div>
+      <div class="task-cards" v-else>
+        <TaskCard
+          v-for="task in tasks.data"
+          :key="task.id"
+          :task="task"
+          @refreshTasks="refreshTasks"
+        />
+      </div>
     </div>
 
     <Pagination :pageData="tasks" @changePage="refetch" />
@@ -121,7 +128,7 @@ const {
   clear,
 } = await useFetch(
   () =>
-    `${baseUrl}?page=${page.value}&search=${search.value}&date_filter=${filterField.value}&dateFrom=${dateFrom.value}&dateTo=${dateTo.value}&priority=${filterFieldPriority.value}&sort_by=${filterField.value}&sort_order=${sortOrder.value}`,
+    `${baseUrl}?page=${page.value}&search=${search.value}&date_filter=${filterField.value}&date_from=${dateFrom.value}&date_to=${dateTo.value}&priority=${filterFieldPriority.value}&sort_by=${filterField.value}&sort_order=${sortOrder.value}`,
   {
     onRequest({ options }) {
       options.headers.set("Authorization", `Bearer ${token}`);
@@ -135,6 +142,10 @@ const {
     },
   }
 );
+
+definePageMeta({
+  middleware: ["$auth"],
+});
 
 watch(
   search,
@@ -152,15 +163,34 @@ const refetch = (pageNumber) => {
 };
 
 const refreshTasks = () => {
+  console.log("reload tasks");
   refresh();
 };
 
 const handleDate = (modelData) => {
-  const dateFrom = new Date(modelData[0]);
-  const dateTo = new Date(modelData[1]);
-  dateFrom.value = dateFrom.toISOString().split("T")[0];
-  dateTo.value = dateTo.toISOString().split("T")[0];
-  console.log([dateFrom.value, dateTo.value]);
+  const from = new Date(modelData[0]);
+  const to = new Date(modelData[1]);
+  dateFrom.value = from.toISOString().split("T")[0];
+  dateTo.value = to.toISOString().split("T")[0];
+
   refresh();
 };
 </script>
+
+<style>
+.empty-tasks {
+  height: 350px;
+  width: 73%;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.tasks-container {
+  min-height: 450px;
+}
+</style>

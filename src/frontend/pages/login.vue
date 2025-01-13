@@ -5,6 +5,7 @@
         <h2>Login</h2>
       </div>
       <div class="card-body">
+        <h4 v-if="loading">Authenticating...</h4>
         <form class="form" @submit.prevent="submitForm">
           <div class="form-input-group">
             <label class="form-label" for="title">Email</label>
@@ -16,6 +17,9 @@
               id="email"
               v-model="form.email"
             />
+            <span class="error-message" v-if="errors.email">
+              {{ errors.email[0] }}
+            </span>
           </div>
           <div class="form-input-group">
             <label class="form-label" for="title">Password</label>
@@ -27,6 +31,9 @@
               id="email"
               v-model="form.password"
             />
+            <span class="error-message" v-if="errors.password">
+              {{ errors.password[0] }}
+            </span>
           </div>
           <div class="btn-actions">
             <NuxtLink class="btn-actions__link" to="/signup">
@@ -45,20 +52,32 @@
   </section>
 </template>
 <script setup>
+import { FetchError } from "ofetch";
+
 definePageMeta({
   layout: "guest",
   middleware: ["$guest"],
 });
 
 const { login } = useSanctum();
-
+const loading = ref(false);
+const errors = ref({});
 const form = reactive({
   email: "johndoe@example.com",
   password: "Secret123!",
 });
 
 const submitForm = async () => {
-  await login(form);
+  loading.value = true;
+  try {
+    await login(form);
+  } catch (err) {
+    if (err instanceof FetchError && err.response?.status === 422) {
+      errors.value = err.response._data.errors;
+    }
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 
@@ -73,6 +92,10 @@ const submitForm = async () => {
     h2 {
       margin: 0;
     }
+  }
+
+  .card-body h4 {
+    text-align: center;
   }
 }
 

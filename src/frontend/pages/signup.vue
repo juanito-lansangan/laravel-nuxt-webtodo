@@ -16,6 +16,9 @@
               id="name"
               v-model="form.name"
             />
+            <span class="error-message" v-if="errors.name">
+              {{ errors.name[0] }}
+            </span>
           </div>
           <div class="form-input-group">
             <label class="form-label" for="title">Email</label>
@@ -27,6 +30,9 @@
               id="email"
               v-model="form.email"
             />
+            <span class="error-message" v-if="errors.email">
+              {{ errors.email[0] }}
+            </span>
           </div>
           <div class="form-input-group">
             <label class="form-label" for="title">Password</label>
@@ -38,6 +44,9 @@
               id="email"
               v-model="form.password"
             />
+            <span class="error-message" v-if="errors.password">
+              {{ errors.password[0] }}
+            </span>
           </div>
           <div class="form-input-group">
             <label class="form-label" for="title">Password Confirmation</label>
@@ -49,6 +58,9 @@
               id="password_confirmation"
               v-model="form.password_confirmation"
             />
+            <span class="error-message" v-if="errors.password_confirmation">
+              {{ errors.password_confirmation[0] }}
+            </span>
           </div>
           <div class="btn-actions">
             <span>
@@ -78,24 +90,33 @@ definePageMeta({
 });
 
 const { refreshUser } = useSanctum();
+const errors = ref({});
 
-const form = useSanctumForm("post", "/api/register", {
+const form = reactive({
   name: "",
   email: "",
   password: "",
   password_confirmation: "",
 });
 
-async function registerUser() {
-  if (form.processing) return;
+const registerUser = async () => {
   try {
-    await form.submit();
+    const response = await useSanctumFetch("/api/register", {
+      method: "post",
+      body: form,
+      onResponse({ request, response, options }) {
+        localStorage.setItem("AUTH_TOKEN", response._data.token);
+      },
+    });
+
     await refreshUser();
     return navigateTo("/");
   } catch (err) {
-    console.log(err);
+    if (err instanceof FetchError && err.response?.status === 422) {
+      errors.value = err.response._data.errors;
+    }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

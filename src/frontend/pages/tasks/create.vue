@@ -15,4 +15,8 @@ const {
     options.headers.set("Authorization", `Bearer ${token}`);
   },
 });
+
+definePageMeta({
+  middleware: ["$auth"],
+});
 </script>
