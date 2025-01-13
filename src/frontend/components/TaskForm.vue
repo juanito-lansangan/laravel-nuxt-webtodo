@@ -223,10 +223,8 @@ const onChangeFileInput = (e) => {
   form.attachments = e.target.files;
 
   if (props.action === "edit-task") {
-    console.log("upload files");
     addNewAttachments();
-  } else {
-    console.log("no upload files");
+    form.attachments = [];
   }
 };
 
@@ -300,40 +298,64 @@ const createTask = async () => {
 };
 
 const updateTask = async () => {
-  const taskId = props.task.id;
+  try {
+    const taskId = props.task.id;
 
-  const response = await useSanctumFetch(`/api/tasks/${taskId}`, {
-    method: "PUT",
-    body: form,
-  });
+    const response = await useSanctumFetch(`/api/tasks/${taskId}`, {
+      method: "PUT",
+      body: form,
+    });
 
-  notify({
-    title: "Update Task",
-    text: "Task successfully updated.",
-    type: "success", // Optional: 'success', 'error', 'warn', etc.
-  });
+    notify({
+      title: "Update Task",
+      text: "Task successfully updated.",
+      type: "success", // Optional: 'success', 'error', 'warn', etc.
+    });
 
-  emit("refreshTasks");
+    emit("refreshTasks");
 
-  await navigateTo("/");
+    await navigateTo("/");
+  } catch (err) {
+    if (err instanceof FetchError && err.response?.status === 422) {
+      errors.value = err.response._data.errors;
+    } else {
+      notify({
+        title: "Delete File",
+        text: "Oops! there's an issue on the server.",
+        type: "error", // Optional: 'success', 'error', 'warn', etc.
+      });
+    }
+  }
 };
 
 const deleteFile = async (attachmentId) => {
-  await useSanctumFetch(`/api/attachments/${attachmentId}`, {
-    method: "DELETE",
-    body: form,
-  });
+  try {
+    await useSanctumFetch(`/api/attachments/${attachmentId}`, {
+      method: "DELETE",
+      body: form,
+    });
 
-  const newItems = form.view_attachments.filter(
-    (item) => item.id !== attachmentId
-  );
-  form.view_attachments = newItems;
+    const newItems = form.view_attachments.filter(
+      (item) => item.id !== attachmentId
+    );
+    form.view_attachments = newItems;
 
-  notify({
-    title: "Delete File",
-    text: "File successfully deleted.",
-    type: "success", // Optional: 'success', 'error', 'warn', etc.
-  });
+    notify({
+      title: "Delete File",
+      text: "File successfully deleted.",
+      type: "success", // Optional: 'success', 'error', 'warn', etc.
+    });
+  } catch (err) {
+    if (err instanceof FetchError && err.response?.status === 422) {
+      errors.value = err.response._data.errors;
+    } else {
+      notify({
+        title: "Delete File",
+        text: "Oops! there's an issue on the server.",
+        type: "error", // Optional: 'success', 'error', 'warn', etc.
+      });
+    }
+  }
 };
 
 const addNewAttachments = async () => {
@@ -342,22 +364,41 @@ const addNewAttachments = async () => {
   const formData = new FormData();
   const files = form.attachments;
 
-  if (files.length > 0) {
-    for (let i = 0; i < files.length; i++) {
-      formData.append("attachments[]", files[i]);
-    }
+  if (files.length == 0) {
+    return;
   }
 
-  await useSanctumFetch(`/api/tasks/${taskId}/attachments`, {
-    method: "post",
-    body: formData,
-  });
+  for (let i = 0; i < files.length; i++) {
+    formData.append("attachments[]", files[i]);
+  }
 
-  notify({
-    title: "Delete File",
-    text: "File successfully deleted.",
-    type: "success", // Optional: 'success', 'error', 'warn', etc.
-  });
+  try {
+    const { data, error } = await useSanctumFetch(
+      `/api/tasks/${taskId}/attachments`,
+      {
+        method: "post",
+        body: formData,
+      }
+    );
+
+    form.view_attachments = data.attachments;
+
+    notify({
+      title: "Delete File",
+      text: "File successfully deleted.",
+      type: "success", // Optional: 'success', 'error', 'warn', etc.
+    });
+  } catch (err) {
+    if (err instanceof FetchError && err.response?.status === 422) {
+      errors.value = err.response._data.errors;
+    } else {
+      notify({
+        title: "Delete File",
+        text: "Oops! there's an issue on the server.",
+        type: "error", // Optional: 'success', 'error', 'warn', etc.
+      });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
