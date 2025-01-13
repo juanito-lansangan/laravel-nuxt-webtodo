@@ -15,7 +15,8 @@ export default defineNuxtConfig({
         '@qirolab/nuxt-sanctum-authentication'
     ],
     laravelSanctum: {
-        apiUrl: 'http://localhost:8006', // Laravel API
+        // apiUrl: 'http://localhost:8006', // Laravel API
+        apiUrl: 'https://api-todo.stjudeappraisal.io', // Laravel API
         // authMode: "cookie",
         authMode: "token",
         userResponseWrapperKey: "data",
