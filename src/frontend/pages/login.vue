@@ -112,6 +112,4 @@ const submitForm = async () => {
     font-size: 14px;
   }
 }
-.login-wrapper {
-}
 </style>
