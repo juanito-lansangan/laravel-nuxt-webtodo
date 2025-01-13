@@ -28,7 +28,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
     Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
 
-    Route::delete('/attachments/{attachment}', AttachmentController::class)->name('attachment.destroy');
-
+    Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy'])->name('attachment.destroy');
+    
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+Route::get('/attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachment.download');

@@ -55,5 +55,10 @@ export default defineNuxtConfig({
             // URL to redirect to after logging out
             redirectToAfterLogout: "/",
         },
-    }
+    },
+    runtimeConfig: {
+        public: {
+            apiUrl: 'http://localhost:8006', // Expose to client
+        },
+    },
 })

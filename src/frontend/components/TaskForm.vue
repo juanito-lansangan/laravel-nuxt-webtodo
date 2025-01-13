@@ -135,7 +135,7 @@
                   </div>
                   <div class="file-info">
                     <a
-                      href="/WTSDL2019_Pamplet.pdf"
+                      :href="`${apiUrl}/api/attachments/${attachment.id}/download`"
                       download=""
                       class="file-link"
                     >
@@ -196,6 +196,9 @@ const props = defineProps({
   task: Object,
   tags: Object,
 });
+
+const config = useRuntimeConfig();
+const apiUrl = config.public.apiUrl;
 
 const form = reactive({
   title: "",
