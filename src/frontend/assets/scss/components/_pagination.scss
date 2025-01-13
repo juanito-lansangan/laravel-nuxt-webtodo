@@ -8,14 +8,14 @@
 
   &-mobile {
     display: flex;
-    @include breakpoint(845px) {
+    @include breakpoint(860px) {
       display: none;
     }
   }
 
   &-desktop {
     display: none;
-    @include breakpoint(845px) {
+    @include breakpoint(865px) {
       display: flex;
     }
   }
