@@ -23,7 +23,7 @@ class AttachmentRequest extends FormRequest
     {
         return [
             'attachments' => ['required', 'array'],
-            'attachments.*' => ['file', 'mimes:svg,png,jpg,mp4,csv,txt,doc,docx', 'max:10240']
+            'attachments.*' => ['mimes:svg,png,jpg,mp4,csv,txt,doc,docx', 'max:10240']
         ];
     }
 }

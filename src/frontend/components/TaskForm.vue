@@ -91,8 +91,8 @@
               multiple
               @change="onChangeFileInput"
             />
-            <span class="error-message" v-if="errors.attachments">
-              {{ errors.attachments[0] }}
+            <span class="error-message" v-if="errors['attachments.0']">
+              {{ errors["attachments.0"][0] }}
             </span>
           </div>
         </form>
