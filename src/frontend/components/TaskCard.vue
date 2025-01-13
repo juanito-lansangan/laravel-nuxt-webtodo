@@ -163,112 +163,122 @@ const showConfirmRestore = () => {
 };
 
 const deleteTask = async () => {
-  const token = localStorage.getItem("AUTH_TOKEN");
-  const taskId = props.task.id;
-  const endpoint = `http://localhost:8006/api/tasks/${taskId}`;
+  try {
+    const taskId = props.task.id;
 
-  const res = await $fetch(endpoint, {
-    method: "DELETE",
-    credentials: "include",
-    onRequest({ options }) {
-      options.headers.set("Authorization", `Bearer ${token}`);
-    },
-  });
+    await useSanctumFetch(`/api/tasks/${taskId}`, {
+      method: "DELETE",
+    });
 
-  notify({
-    title: "Delete Task",
-    text: "Task successfully deleted.",
-    type: "success",
-  });
-  emit("refreshTasks");
+    notify({
+      title: "Delete Task",
+      text: "Task successfully deleted.",
+      type: "success",
+    });
+    emit("refreshTasks");
+  } catch (err) {
+    notify({
+      title: "Delete Task",
+      text: "Oops! there's an issue on the server.",
+      type: "error",
+    });
+  }
 };
 
 const completeTask = async () => {
-  const token = localStorage.getItem("AUTH_TOKEN");
-  const taskId = props.task.id;
-  const endpoint = `http://localhost:8006/api/tasks/${taskId}/complete`;
+  try {
+    const taskId = props.task.id;
 
-  const res = await $fetch(endpoint, {
-    method: "PATCH",
-    credentials: "include",
-    onRequest({ options }) {
-      options.headers.set("Authorization", `Bearer ${token}`);
-    },
-  });
+    await useSanctumFetch(`/api/tasks/${taskId}/complete`, {
+      method: "PATCH",
+    });
 
-  notify({
-    title: "Mark completed Task",
-    text: "Task successfully mark as completed.",
-    type: "success",
-  });
+    notify({
+      title: "Mark completed Task",
+      text: "Task successfully mark as completed.",
+      type: "success",
+    });
 
-  emit("refreshTasks");
+    emit("refreshTasks");
+  } catch (err) {
+    notify({
+      title: "Mark completed Task",
+      text: "Oops! there's an issue on the server.",
+      type: "error",
+    });
+  }
 };
 
 const inProgressTask = async () => {
-  const token = localStorage.getItem("AUTH_TOKEN");
-  const taskId = props.task.id;
-  const endpoint = `http://localhost:8006/api/tasks/${taskId}/inprogress`;
+  try {
+    const taskId = props.task.id;
 
-  const res = await $fetch(endpoint, {
-    method: "PATCH",
-    credentials: "include",
-    onRequest({ options }) {
-      options.headers.set("Authorization", `Bearer ${token}`);
-    },
-  });
+    await useSanctumFetch(`/api/tasks/${taskId}/inprogress`, {
+      method: "PATCH",
+    });
 
-  notify({
-    title: "Mark completed Task",
-    text: "Task successfully mark as inprogress.",
-    type: "success",
-  });
+    notify({
+      title: "Mark inprogress Task",
+      text: "Task successfully mark as inprogress.",
+      type: "success",
+    });
 
-  emit("refreshTasks");
+    emit("refreshTasks");
+  } catch (err) {
+    notify({
+      title: "Mark inprogress Task",
+      text: "Oops! there's an issue on the server.",
+      type: "error",
+    });
+  }
 };
 
 const archiveTask = async () => {
-  const token = localStorage.getItem("AUTH_TOKEN");
-  const taskId = props.task.id;
-  const endpoint = `http://localhost:8006/api/tasks/${taskId}/archive`;
+  try {
+    const taskId = props.task.id;
 
-  const res = await $fetch(endpoint, {
-    method: "PATCH",
-    credentials: "include",
-    onRequest({ options }) {
-      options.headers.set("Authorization", `Bearer ${token}`);
-    },
-  });
+    await useSanctumFetch(`/api/tasks/${taskId}/archive`, {
+      method: "PATCH",
+    });
 
-  notify({
-    title: "Archived Task",
-    text: "Task successfully archived.",
-    type: "success",
-  });
+    notify({
+      title: "Archived Task",
+      text: "Task successfully archived.",
+      type: "success",
+    });
 
-  emit("refreshTasks");
+    emit("refreshTasks");
+  } catch (err) {
+    notify({
+      title: "Archived Task",
+      text: "Oops! there's an issue on the server.",
+      type: "error",
+    });
+  }
 };
 
 const restoreTask = async () => {
-  const token = localStorage.getItem("AUTH_TOKEN");
-  const taskId = props.task.id;
-  const endpoint = `http://localhost:8006/api/tasks/${taskId}/restore`;
+  try {
+    const taskId = props.task.id;
 
-  const res = await $fetch(endpoint, {
-    method: "PATCH",
-    credentials: "include",
-    onRequest({ options }) {
-      options.headers.set("Authorization", `Bearer ${token}`);
-    },
-  });
+    await useSanctumFetch(`/api/tasks/${taskId}/restore`, {
+      method: "PATCH",
+    });
 
-  notify({
-    title: "Restore Task",
-    text: "Task successfully restored.",
-    type: "success",
-  });
+    notify({
+      title: "Restore Task",
+      text: "Task successfully restored.",
+      type: "success",
+    });
 
-  emit("refreshTasks");
+    emit("refreshTasks");
+  } catch (err) {
+    notify({
+      title: "Restore Task",
+      text: "Oops! there's an issue on the server.",
+      type: "error", // Optional: 'success', 'error', 'warn', etc.
+    });
+  }
 };
 </script>
 <style lang="scss" scoped>
