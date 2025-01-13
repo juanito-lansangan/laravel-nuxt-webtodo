@@ -24,6 +24,9 @@
               id="title"
               v-model="form.title"
             />
+            <span class="error-message" v-if="errors.title">
+              {{ errors.title[0] }}
+            </span>
           </div>
           <div class="form-input-group">
             <label class="form-label" for="description">Description</label>
@@ -36,6 +39,9 @@
               id="description"
               rows="4"
             ></textarea>
+            <span class="error-message" v-if="errors.description">
+              {{ errors.description[0] }}
+            </span>
           </div>
 
           <div class="form-input-group">
@@ -52,10 +58,16 @@
               <option value="2">Normal</option>
               <option value="1">Low</option>
             </select>
+            <span class="error-message" v-if="errors.priority">
+              {{ errors.priority[0] }}
+            </span>
           </div>
           <div class="form-input-group">
             <label class="form-label">Due Date</label>
             <VueDatePicker v-model="form.due_date" format="MM/dd/yyyy" />
+            <span class="error-message" v-if="errors.due_date">
+              {{ errors.due_date[0] }}
+            </span>
           </div>
 
           <div class="form-input-group">
@@ -67,6 +79,9 @@
               multiple
               :id="'tags-select'"
             />
+            <span class="error-message" v-if="errors.tags">
+              {{ errors.tags[0] }}
+            </span>
           </div>
           <div class="form-input-group">
             <label class="form-label" for="title">Attachments</label>
@@ -76,6 +91,9 @@
               multiple
               @change="onChangeFileInput"
             />
+            <span class="error-message" v-if="errors.attachments">
+              {{ errors.attachments[0] }}
+            </span>
           </div>
         </form>
       </div>
@@ -88,6 +106,7 @@
   </section>
 </template>
 <script setup>
+import { FetchError } from "ofetch";
 import { ref, reactive } from "vue";
 const { notify } = useNotification();
 
@@ -105,6 +124,8 @@ const form = reactive({
   tags: [],
   attachments: [],
 });
+
+const errors = ref({});
 
 if (props.task) {
   form.tags = props.task.tags.map((item) => item.name);
@@ -160,23 +181,30 @@ const createTask = async (form) => {
   const token = localStorage.getItem("AUTH_TOKEN");
   const endpoint = `http://localhost:8006/api/tasks`;
 
-  const res = await $fetch(endpoint, {
-    method: "POST",
-    credentials: "include",
-    body: form,
-    onRequest({ options }) {
-      options.headers.set("Authorization", `Bearer ${token}`);
-      //   options.headers.set("Content-Type", "multipart/form-data");
-    },
-  });
+  try {
+    const res = await $fetch(endpoint, {
+      method: "POST",
+      credentials: "include",
+      body: form,
+      onRequest({ options }) {
+        options.headers.set("Authorization", `Bearer ${token}`);
+        //   options.headers.set("Content-Type", "multipart/form-data");
+      },
+    });
 
-  notify({
-    title: "Create Task",
-    text: "Task successfully created.",
-    type: "success", // Optional: 'success', 'error', 'warn', etc.
-  });
+    notify({
+      title: "Create Task",
+      text: "Task successfully created.",
+      type: "success", // Optional: 'success', 'error', 'warn', etc.
+    });
 
-  await navigateTo("/");
+    await navigateTo("/");
+  } catch (err) {
+    if (err instanceof FetchError && err.response?.status === 422) {
+      errors.value = err.response._data.errors;
+    }
+  }
+
   //   emit("refreshTasks");
 };
 
