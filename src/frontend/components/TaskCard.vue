@@ -42,14 +42,20 @@
         }}</span>
       </div>
       <div class="card-attachment-wrapper" v-if="task.attachments">
-        <a href="#" class="card-attachment">
+        <a
+          :href="`${apiUrl}/api/attachments/${attachment.id}/download`"
+          download=""
+          class="card-attachment"
+          v-for="attachment in task.attachments"
+          :key="attachment.id"
+        >
           <Icon
             class="card-attachment-icon"
             name="material-symbols:file-present-outline-rounded"
             style="color: black"
             size="18"
           />
-          <span class="card-attachment-label">Download attachments</span>
+          <span class="card-attachment-label">{{ attachment.name }}</span>
         </a>
       </div>
     </div>
@@ -101,6 +107,9 @@ const { notify } = useNotification();
 const props = defineProps({
   task: Object,
 });
+
+const config = useRuntimeConfig();
+const apiUrl = config.public.apiUrl;
 
 const priorityStatus = computed(() => {
   const task = props.task;
