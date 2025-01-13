@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TaskController;
@@ -22,10 +23,12 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::patch('/tasks/{task}/archive', [TaskController::class, 'archive'])->name('tasks.archive');
     Route::patch('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
     Route::patch('/tasks/{task}/tags', [TaskController::class, 'addTags'])->name('tasks.addtags');
-    Route::patch('/tasks/{task}/attachments', [TaskController::class, 'addAttachments'])->name('tasks.attachments');
+    Route::post('/tasks/{task}/attachments', [TaskController::class, 'addAttachments'])->name('tasks.attachments');
 
     Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
     Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
+
+    Route::delete('/attachments/{attachment}', AttachmentController::class)->name('attachment.destroy');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

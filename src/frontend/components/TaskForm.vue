@@ -85,12 +85,91 @@
           </div>
           <div class="form-input-group">
             <label class="form-label" for="title">Attachments</label>
-            <input
-              class="form-input-file"
-              type="file"
-              multiple
-              @change="onChangeFileInput"
-            />
+            <div class="file-container">
+              <div
+                class="file-preview"
+                v-if="action !== 'create-task' && task.attachments.length > 0"
+              >
+                <div
+                  v-for="attachment in form.view_attachments"
+                  class="file-item"
+                  :key="attachment.id"
+                >
+                  <div>
+                    <Icon
+                      v-if="
+                        attachment.type === 'doc' || attachment.type === 'docx'
+                      "
+                      class="preview-icon"
+                      name="tabler:file-type-docx"
+                      style="color: black"
+                      size="28"
+                    />
+                    <Icon
+                      v-else-if="
+                        attachment.type === 'png' ||
+                        attachment.type === 'jpeg' ||
+                        attachment.type === 'gif'
+                      "
+                      class="preview-icon"
+                      name="material-symbols:imagesmode-outline"
+                      style="color: black"
+                      size="28"
+                    />
+                    <Icon
+                      v-else-if="
+                        attachment.type === 'mp3' || attachment.type === 'mp4'
+                      "
+                      class="preview-icon"
+                      name="material-symbols:video-file"
+                      style="color: black"
+                      size="28"
+                    />
+                    <Icon
+                      v-else
+                      class="preview-icon"
+                      name="tabler:file-description"
+                      style="color: black"
+                      size="28"
+                    />
+                  </div>
+                  <div class="file-info">
+                    <a
+                      href="/WTSDL2019_Pamplet.pdf"
+                      download=""
+                      class="file-link"
+                    >
+                      <label class="ellipsis-line-1">{{
+                        attachment.name
+                      }}</label>
+                      <span>{{ attachment.type }}</span>
+                    </a>
+                  </div>
+                  <Icon
+                    class="delete-icon"
+                    name="material-symbols:close-small-outline-rounded"
+                    style="color: black"
+                    size="28"
+                    @click="deleteFile(attachment.id)"
+                  />
+                </div>
+              </div>
+              <label for="file-attachment" class="file-attachment-panel">
+                <div class="file-attachment-info">
+                  <h3>Click to upload</h3>
+                  <p>
+                    <span>DOC, DOCX, PNG, JPG, GIF</span>
+                  </p>
+                </div>
+                <input
+                  name="file-attachment"
+                  id="file-attachment"
+                  type="file"
+                  multiple
+                  @change="onChangeFileInput"
+                />
+              </label>
+            </div>
             <span class="error-message" v-if="errors['attachments.0']">
               {{ errors["attachments.0"][0] }}
             </span>
@@ -142,6 +221,13 @@ if (props.task) {
 
 const onChangeFileInput = (e) => {
   form.attachments = e.target.files;
+
+  if (props.action === "edit-task") {
+    console.log("upload files");
+    addNewAttachments();
+  } else {
+    console.log("no upload files");
+  }
 };
 
 const tagOptions = computed(() => {
@@ -149,6 +235,11 @@ const tagOptions = computed(() => {
 });
 
 const handleSubmit = async () => {
+  if (form.due_date) {
+    const date = new Date(form.due_date);
+    form.due_date = date.toISOString().split("T")[0];
+  }
+
   if (props.action == "create-task") {
     createTask();
     return;
@@ -185,11 +276,7 @@ const createTask = async () => {
       }
     }
 
-    if (form.due_date) {
-      const date = new Date(form.due_date);
-      const formattedDate = date.toISOString().split("T")[0];
-      formData.append("due_date", formattedDate);
-    }
+    formData.append("due_date", form.due_date);
 
     const response = await useSanctumFetch("/api/tasks", {
       method: "post",
@@ -213,17 +300,11 @@ const createTask = async () => {
 };
 
 const updateTask = async () => {
-  const token = localStorage.getItem("AUTH_TOKEN");
   const taskId = props.task.id;
-  const endpoint = `http://localhost:8006/api/tasks/${taskId}`;
 
-  const res = await $fetch(endpoint, {
+  const response = await useSanctumFetch(`/api/tasks/${taskId}`, {
     method: "PUT",
-    credentials: "include",
     body: form,
-    onRequest({ options }) {
-      options.headers.set("Authorization", `Bearer ${token}`);
-    },
   });
 
   notify({
@@ -236,9 +317,53 @@ const updateTask = async () => {
 
   await navigateTo("/");
 };
+
+const deleteFile = async (attachmentId) => {
+  await useSanctumFetch(`/api/attachments/${attachmentId}`, {
+    method: "DELETE",
+    body: form,
+  });
+
+  const newItems = form.view_attachments.filter(
+    (item) => item.id !== attachmentId
+  );
+  form.view_attachments = newItems;
+
+  notify({
+    title: "Delete File",
+    text: "File successfully deleted.",
+    type: "success", // Optional: 'success', 'error', 'warn', etc.
+  });
+};
+
+const addNewAttachments = async () => {
+  const taskId = props.task.id;
+
+  const formData = new FormData();
+  const files = form.attachments;
+
+  if (files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+      formData.append("attachments[]", files[i]);
+    }
+  }
+
+  await useSanctumFetch(`/api/tasks/${taskId}/attachments`, {
+    method: "post",
+    body: formData,
+  });
+
+  notify({
+    title: "Delete File",
+    text: "File successfully deleted.",
+    type: "success", // Optional: 'success', 'error', 'warn', etc.
+  });
+};
 </script>
 <style lang="scss" scoped>
 .task-form {
+  max-width: 900px;
+  margin: auto;
   padding: 40px;
 
   .card {

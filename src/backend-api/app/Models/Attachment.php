@@ -13,7 +13,7 @@ class Attachment extends Model
     /** @use HasFactory<\Database\Factories\AttachmentFactory> */
     use HasFactory;
 
-    protected $fillable = ['path', 'type'];
+    protected $fillable = ['path', 'type', 'name'];
 
     protected $appends = ['file_url'];
 

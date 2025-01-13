@@ -23,7 +23,7 @@ test('uploading valid files receive 200 response with task data that includes at
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$token}"
     ])
-    ->patchJson("/api/tasks/{$task->id}/attachments", [
+    ->postJson("/api/tasks/{$task->id}/attachments", [
         'attachments' => $files
     ]);
 
@@ -51,7 +51,7 @@ test('uploading invalid files receive 422 response with error message', function
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$token}"
     ])
-    ->patchJson("/api/tasks/{$task->id}/attachments", [
+    ->postJson("/api/tasks/{$task->id}/attachments", [
         'attachments' => $files
     ]);
     
@@ -83,7 +83,7 @@ test('uploading files to a non-existent task receive 404 response', function() {
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$token}"
     ])
-    ->patchJson("/api/tasks/999/attachments", [
+    ->postJson("/api/tasks/999/attachments", [
         'attachments' => $files
     ]);
 
@@ -108,7 +108,7 @@ test('uploading files to a task I do not own receive 401 response', function() {
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$otherUserToken}"
     ])
-    ->patchJson("/api/tasks/{$task->id}/attachments", [
+    ->postJson("/api/tasks/{$task->id}/attachments", [
         'attachments' => $files
     ]);
 

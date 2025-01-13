@@ -1,4 +1,5 @@
 @use "../variables" as *;
+@use "../breakpoints" as *;
 
 .form-label {
   font-size: $font-size-md;
@@ -47,6 +48,78 @@
   font-size: $font-size-md;
   padding: 12px;
   font-weight: 550;
+}
+
+.file-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .file-link {
+    text-decoration: none;
+    color: #292727;
+    display: block;
+  }
+
+  .file-preview {
+    display: grid;
+    gap: 2px;
+    grid-template-columns: repeat(1, 1fr);
+
+    @include md {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include lg {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .file-item {
+    height: 30px;
+    border: 1px solid #ddd;
+    display: flex;
+    padding: 4px;
+    gap: 8px;
+    position: relative;
+
+    .file-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .file-title {
+      @include lg {
+        max-width: 160px;
+      }
+    }
+    .delete-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
+
+  .file-attachment-panel {
+    border: 2px dotted #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    h3 {
+      text-align: center;
+    }
+    span {
+      font-size: $font-size-sm;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+  }
 }
 
 .form-select {

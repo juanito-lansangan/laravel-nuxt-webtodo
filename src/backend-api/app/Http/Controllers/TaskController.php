@@ -32,15 +32,6 @@ class TaskController extends Controller
         ->paginate(6)
         ->withQueryString();
 
-        $debug = $request->user()->tasks()
-        ->filter($request, $search)
-        ->sort($request)
-        // ->paginate(6)
-        ->toSql();
-
-        Log::info($request->all());
-        Log::info($debug);
-
         return TaskResource::collection($data);
     }
 

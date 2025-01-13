@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained()->cascadeOnDelete();
             $table->string('path');
+            $table->string('name');
             $table->string('type');
             $table->timestamps();
         });

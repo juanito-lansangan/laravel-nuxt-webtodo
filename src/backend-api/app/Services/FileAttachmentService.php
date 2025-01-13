@@ -16,6 +16,7 @@ class FileAttachmentService
 
             $uploadFiles[] = new Attachment([
                 'path' => $path,
+                'name' => $file->getClientOriginalName(),
                 'type' => $file->getClientOriginalExtension(),
             ]);
         }
