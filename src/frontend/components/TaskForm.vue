@@ -88,7 +88,9 @@
             <div class="file-container">
               <div
                 class="file-preview"
-                v-if="action !== 'create-task' && task.attachments.length > 0"
+                v-if="
+                  action !== 'create-task' && form.view_attachments.length > 0
+                "
               >
                 <div
                   v-for="attachment in form.view_attachments"
