@@ -4,7 +4,7 @@
 
 Appetiser fullstack coding challenge with Laravel + Vue + Documentation
 
-##Instructions
+## Instructions
 
 clone the repo
 
@@ -54,12 +54,13 @@ run migration and seeders
 docker-compose exec app php artisan migrate:fresh --seed
 ```
 
-Visit Backend API Docs
+## Visit Backend API Docs
+
 http://localhost:8006/docs/api#/
 
 Backend is done.
 
-##Let's install frontend now
+## Let's install the frontend now
 
 change to frontent directory
 
