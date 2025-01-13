@@ -47,3 +47,42 @@ run the automated tests for laravel api to see if all features are not broken
 ```
 docker-compose exec app php artisan test
 ```
+
+run migration and seeders
+
+```
+docker-compose exec app php artisan migrate:fresh --seed
+```
+
+Visit Backend API Docs
+http://localhost:8006/docs/api#/
+
+Backend is done.
+
+##Let's install frontend now
+
+change to frontent directory
+
+```
+cd src/frontend
+```
+
+install dependencies
+
+```
+npm install
+```
+
+Run the frontend app
+
+```
+npm run dev
+```
+
+Visit the app
+http://localhost:3000
+
+and that's it, if we run all the steps above we have dummy data ready.
+From here you can click the login button and it will redirect you too the home page.
+
+And that's pretty much it.
