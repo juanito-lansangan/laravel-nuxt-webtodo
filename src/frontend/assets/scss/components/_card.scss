@@ -17,6 +17,10 @@
     max-height: 18px;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    a {
+      text-decoration: none;
+    }
   }
 
   .card-body {
