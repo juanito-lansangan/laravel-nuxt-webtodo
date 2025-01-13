@@ -86,3 +86,4 @@ and that's it, if we run all the steps above we have dummy data ready.
 From here you can click the login button and it will redirect you too the home page.
 
 And that's pretty much it.
+Let me know if you have questions. :)
