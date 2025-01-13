@@ -40,9 +40,8 @@
         <span class="tag" v-for="(tag, index) in task.tags" :key="tag.id">{{
           index > 4 ? "+10 more" : tag.name
         }}</span>
-        <!-- <span class="tag">+10 more</span> -->
       </div>
-      <div class="card-attachment-wrapper" v-if="task.attachment">
+      <div class="card-attachment-wrapper" v-if="task.attachments">
         <a href="#" class="card-attachment">
           <Icon
             class="card-attachment-icon"

@@ -110,6 +110,8 @@ import { FetchError } from "ofetch";
 import { ref, reactive } from "vue";
 const { notify } = useNotification();
 
+const emit = defineEmits(["refreshTasks"]);
+
 const props = defineProps({
   action: String,
   task: Object,
@@ -122,7 +124,8 @@ const form = reactive({
   priority: 1,
   due_date: null,
   tags: [],
-  attachments: [],
+  attachments: [], // to be use on request for storing
+  view_attachments: [], // to list existing files
 });
 
 const errors = ref({});
@@ -133,11 +136,11 @@ if (props.task) {
   form.description = props.task.description;
   form.priority = props.task.priority;
   form.due_date = props.task.due_date;
-  // form.attachments = [];
+  form.view_attachments = props.task.attachments;
+  form.attachments = [];
 }
 
 const onChangeFileInput = (e) => {
-  console.log(e.target.files);
   form.attachments = e.target.files;
 };
 
@@ -145,28 +148,9 @@ const tagOptions = computed(() => {
   return props.tags.data.map((item) => item.name);
 });
 
-const handleSubmit = () => {
-  if (form.due_date) {
-    const date = new Date(form.due_date);
-    const formattedDate = date.toISOString().split("T")[0];
-    form.due_date = formattedDate;
-  }
-
-  const formData = new FormData();
-
-  for (let file in form.attachments) {
-    formData.append("attachments[]", file);
-  }
-
-  formData.append("title", form.title);
-  formData.append("description", form.description);
-  formData.append("priority", form.priority);
-  formData.append("due_date", form.due_date);
-  formData.append("tags", form.tags);
-
+const handleSubmit = async () => {
   if (props.action == "create-task") {
-    // createTask(formData);
-    createTask(form);
+    createTask();
     return;
   }
 
@@ -177,19 +161,39 @@ const handleSubmit = () => {
   }
 };
 
-const createTask = async (form) => {
-  const token = localStorage.getItem("AUTH_TOKEN");
-  const endpoint = `http://localhost:8006/api/tasks`;
-
+const createTask = async () => {
   try {
-    const res = await $fetch(endpoint, {
-      method: "POST",
-      credentials: "include",
-      body: form,
-      onRequest({ options }) {
-        options.headers.set("Authorization", `Bearer ${token}`);
-        //   options.headers.set("Content-Type", "multipart/form-data");
-      },
+    console.log("sending to server");
+
+    const formData = new FormData();
+    const files = form.attachments;
+
+    if (files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append("attachments[]", files[i]);
+      }
+    }
+
+    formData.append("title", form.title);
+    formData.append("description", form.description);
+    formData.append("priority", form.priority);
+
+    const tags = form.tags;
+    if (tags.length > 0) {
+      for (let i = 0; i < tags.length; i++) {
+        formData.append("tags[]", tags[i]);
+      }
+    }
+
+    if (form.due_date) {
+      const date = new Date(form.due_date);
+      const formattedDate = date.toISOString().split("T")[0];
+      formData.append("due_date", formattedDate);
+    }
+
+    const response = await useSanctumFetch("/api/tasks", {
+      method: "post",
+      body: formData,
     });
 
     notify({
@@ -198,14 +202,14 @@ const createTask = async (form) => {
       type: "success", // Optional: 'success', 'error', 'warn', etc.
     });
 
+    emit("refreshTasks");
+
     await navigateTo("/");
   } catch (err) {
     if (err instanceof FetchError && err.response?.status === 422) {
       errors.value = err.response._data.errors;
     }
   }
-
-  //   emit("refreshTasks");
 };
 
 const updateTask = async () => {
@@ -228,8 +232,9 @@ const updateTask = async () => {
     type: "success", // Optional: 'success', 'error', 'warn', etc.
   });
 
+  emit("refreshTasks");
+
   await navigateTo("/");
-  //   emit("refreshTasks");
 };
 </script>
 <style lang="scss" scoped>
