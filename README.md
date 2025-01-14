@@ -22,7 +22,7 @@ git clone git@github.com:juanito-lansangan/laravel-nuxt-webtodo.git
 Change directory:
 
 ```bash
-cd 01092025-juanito-lansangan-web/
+cd laravel-nuxt-webtodo
 ```
 
 Copy Laravel `.env` file:
