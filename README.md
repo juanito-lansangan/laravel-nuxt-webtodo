@@ -4,97 +4,101 @@
 
 Appetiser fullstack coding challenge with Laravel + Vue + Documentation
 
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
 ## Instructions
 
-clone the repo
+Clone the repo:
 
-```
+```bash
 git clone https://gitlab.com/appetiser/appetiser-pre-hire-coding-challenge/01092025-juanito-lansangan-web.git
 ```
 
-change directory e.g cd <repo directory>
+Change directory:
 
-```
+```bash
 cd 01092025-juanito-lansangan-web/
 ```
 
-copy laravel env file
+Copy Laravel `.env` file:
 
-```
+```bash
 cp src/backend-api/.env.example src/backend-api/.env
 ```
 
-build the docker images
+Build the Docker images:
 
-```
+```bash
 docker-compose build
 ```
 
-run the docker containers
+Run the Docker containers:
 
-```
+```bash
 docker-compose up -d && docker ps -a
 ```
 
-install laravel dependencies
+Install Laravel dependencies:
 
-```
+```bash
 docker-compose exec app composer install
 ```
 
-run the automated tests for laravel api to see if all features are not broken
+Run the automated tests for the Laravel API to ensure all features are functioning correctly:
 
-```
+```bash
 docker-compose exec app php artisan test
 ```
 
-run migration and seeders
+Run migrations and seeders:
 
-```
+```bash
 docker-compose exec app php artisan migrate:fresh --seed
 ```
 
 ## Visit Backend API Docs
 
-http://localhost:8006/docs/api#/
+[http://localhost:8006/docs/api#/](http://localhost:8006/docs/api#/)
 
-Backend is done.
+Backend setup is complete.
 
-## Let's install the frontend now
+## Install the Frontend
 
-change to frontent directory
+Change to the frontend directory:
 
-```
+```bash
 cd src/frontend
 ```
 
-install dependencies
+Install dependencies:
 
-```
+```bash
 npm install
 ```
 
-Run the frontend app
+Run the frontend app:
 
-```
+```bash
 npm run dev
 ```
 
-Visit the app
-http://localhost:3000
+Visit the app:
 
-and that's it, if we run all the steps above we have dummy data ready.
-From here you can click the login button and it will redirect you too the home page.
+[http://localhost:3000](http://localhost:3000)
 
-And that's pretty much it.
+If all the steps above are followed correctly, you should have dummy data ready. From here, you can click the login button, which will redirect you to the home page.
 
 ## Demo
 
-You can use this demo link to test the application https://todo.stjudeappraisal.io
+You can use this demo link to test the application: [https://todo.stjudeappraisal.io](https://todo.stjudeappraisal.io)
 
-You can use this existing account or you can signup on the app
+You can use the following existing account or sign up on the app:
 
-```
-email: johndoe@example.com
-pass: Secret123!
-```
+```plaintext
+Email: johndoe@example.com
+Password: Secret123!
