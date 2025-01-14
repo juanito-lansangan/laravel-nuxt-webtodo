@@ -59,7 +59,8 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            apiUrl: 'http://localhost:8006', // Expose to client
+            // apiUrl: 'http://localhost:8006', // Expose to client
+            apiUrl: 'https://api-todo.stjudeappraisal.io', // Laravel API
         },
     },
 })

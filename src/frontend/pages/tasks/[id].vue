@@ -2,7 +2,7 @@
   <div>
     <TaskForm
       :task="taskDetails.task.data"
-      :tags="taskDetails.tags"
+      :tags="taskDetails.tags.data"
       action="edit-task"
     />
   </div>
@@ -16,16 +16,8 @@ const { data: taskDetails } = await useAsyncData(
   `task-data-${id}`,
   async () => {
     const [task, tags] = await Promise.all([
-      $fetch(`http://localhost:8006/api/tasks/${id}`, {
-        onRequest({ options }) {
-          options.headers.set("Authorization", `Bearer ${token}`);
-        },
-      }),
-      $fetch(`http://localhost:8006/api/tags`, {
-        onRequest({ options }) {
-          options.headers.set("Authorization", `Bearer ${token}`);
-        },
-      }),
+      useSanctumFetch(`api/tasks/${id}`),
+      useSanctumFetch("/api/tags"),
     ]);
 
     return { task, tags };

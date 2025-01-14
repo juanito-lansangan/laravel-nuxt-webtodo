@@ -120,28 +120,16 @@ const dateFrom = ref("");
 const dateTo = ref("");
 const dateRange = ref("");
 
-const baseUrl = "http://localhost:8006/api/tasks";
-
-const {
-  data: tasks,
-  refresh,
-  clear,
-} = await useFetch(
-  () =>
-    `${baseUrl}?page=${page.value}&search=${search.value}&date_filter=${filterField.value}&date_from=${dateFrom.value}&date_to=${dateTo.value}&priority=${filterFieldPriority.value}&sort_by=${filterField.value}&sort_order=${sortOrder.value}`,
-  {
-    onRequest({ options }) {
-      options.headers.set("Authorization", `Bearer ${token}`);
-      showPreloader.value = true;
-    },
-    onResponse({ request, response, options }) {
-      showPreloader.value = false;
-    },
-    onResponseError({ request, response, options }) {
-      showPreloader.value = false;
-    },
+const { data: tasks, refresh } = await useAsyncData(
+  `task-data-list`,
+  async () => {
+    return await useSanctumFetch(
+      `api/tasks/?page=${page.value}&search=${search.value}&date_filter=${filterField.value}&date_from=${dateFrom.value}&date_to=${dateTo.value}&priority=${filterFieldPriority.value}&sort_by=${filterField.value}&sort_order=${sortOrder.value}`
+    );
   }
 );
+
+console.log(tasks);
 
 definePageMeta({
   middleware: ["$auth"],
@@ -155,16 +143,18 @@ watch(
 );
 
 // Refetch tasks when page changes
-const refetch = (pageNumber) => {
+const refetch = async (pageNumber) => {
+  showPreloader.value = true;
   if (pageNumber) {
     page.value = pageNumber;
   }
-  refresh();
+  await refresh();
+  showPreloader.value = false;
 };
 
 const refreshTasks = () => {
   console.log("reload tasks");
-  refresh();
+  refetch();
 };
 
 const handleDate = (modelData) => {
@@ -173,7 +163,7 @@ const handleDate = (modelData) => {
   dateFrom.value = from.toISOString().split("T")[0];
   dateTo.value = to.toISOString().split("T")[0];
 
-  refresh();
+  refetch();
 };
 </script>
 

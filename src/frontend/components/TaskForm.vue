@@ -234,7 +234,7 @@ const onChangeFileInput = (e) => {
 };
 
 const tagOptions = computed(() => {
-  return props.tags.data.map((item) => item.name);
+  return props.tags.map((item) => item.name);
 });
 
 const handleSubmit = async () => {
