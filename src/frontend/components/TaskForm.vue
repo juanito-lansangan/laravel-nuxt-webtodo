@@ -238,11 +238,6 @@ const tagOptions = computed(() => {
 });
 
 const handleSubmit = async () => {
-  if (form.due_date) {
-    const date = new Date(form.due_date);
-    form.due_date = date.toISOString().split("T")[0];
-  }
-
   if (props.action == "create-task") {
     createTask();
     return;
@@ -279,7 +274,11 @@ const createTask = async () => {
       }
     }
 
-    formData.append("due_date", form.due_date);
+    if (form.due_date) {
+      const date = new Date(form.due_date);
+      const dueDate = date.toISOString().split("T")[0];
+      formData.append("due_date", dueDate);
+    }
 
     const response = await useSanctumFetch("/api/tasks", {
       method: "post",
@@ -305,6 +304,11 @@ const createTask = async () => {
 const updateTask = async () => {
   try {
     const taskId = props.task.id;
+
+    if (form.due_date) {
+      const date = new Date(form.due_date);
+      form.due_date = date.toISOString().split("T")[0];
+    }
 
     const response = await useSanctumFetch(`/api/tasks/${taskId}`, {
       method: "PUT",
