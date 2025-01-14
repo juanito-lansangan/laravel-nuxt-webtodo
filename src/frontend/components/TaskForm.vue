@@ -86,12 +86,7 @@
           <div class="form-input-group">
             <label class="form-label" for="title">Attachments</label>
             <div class="file-container">
-              <div
-                class="file-preview"
-                v-if="
-                  action !== 'create-task' && form.view_attachments.length > 0
-                "
-              >
+              <div class="file-preview" v-if="form.view_attachments.length > 0">
                 <div
                   v-for="attachment in form.view_attachments"
                   class="file-item"
@@ -111,6 +106,7 @@
                       v-else-if="
                         attachment.type === 'png' ||
                         attachment.type === 'jpeg' ||
+                        attachment.type === 'jpg' ||
                         attachment.type === 'gif'
                       "
                       class="preview-icon"
@@ -230,6 +226,20 @@ const onChangeFileInput = (e) => {
   if (props.action === "edit-task") {
     addNewAttachments();
     form.attachments = [];
+  } else {
+    const files = e.target.files;
+    const previewFiles = [];
+    for (let i = 0; i < e.target.files.length; i++) {
+      const file = files[i];
+
+      previewFiles.push({
+        id: i + 1,
+        name: file.name,
+        type: file.name.split(".").pop().toLowerCase(),
+      });
+    }
+
+    form.view_attachments = previewFiles;
   }
 };
 
@@ -337,17 +347,36 @@ const updateTask = async () => {
   }
 };
 
+const removeAttachmentFromInput = (attachmentId) => {
+  const selectedFile = form.view_attachments.find(
+    (item) => item.id === attachmentId
+  );
+
+  const attachments = Array.from(form.attachments);
+  form.attachments = attachments.filter(
+    (item) => item.name !== selectedFile.name
+  );
+
+  const newItems = form.view_attachments.filter(
+    (item) => item.id !== attachmentId
+  );
+  form.view_attachments = newItems;
+};
+
 const deleteFile = async (attachmentId) => {
   try {
+    removeAttachmentFromInput(attachmentId);
+
+    if (props.action === "create-task") {
+      // for create action we only preview the files
+      // not on db yet
+      return;
+    }
+
     await useSanctumFetch(`/api/attachments/${attachmentId}`, {
       method: "DELETE",
       body: form,
     });
-
-    const newItems = form.view_attachments.filter(
-      (item) => item.id !== attachmentId
-    );
-    form.view_attachments = newItems;
 
     notify({
       title: "Delete File",
@@ -414,7 +443,7 @@ const addNewAttachments = async () => {
 .task-form {
   max-width: 900px;
   margin: auto;
-  padding: 40px;
+  padding: 20px;
 
   .card {
     padding: 20px;

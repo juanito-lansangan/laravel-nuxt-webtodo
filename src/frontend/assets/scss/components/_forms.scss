@@ -66,12 +66,12 @@
     gap: 2px;
     grid-template-columns: repeat(1, 1fr);
 
-    @include md {
+    @include breakpoint(850px) {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    @include lg {
-      grid-template-columns: repeat(4, 1fr);
+    @include breakpoint(1000px) {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
@@ -83,10 +83,26 @@
     gap: 8px;
     position: relative;
 
+    @include breakpoint(1000px) {
+      min-width: 274px;
+      max-width: 274px;
+    }
+
     .file-info {
       display: flex;
       flex-direction: column;
+      max-width: 200px;
+
+      @include breakpoint(482px) {
+        max-width: inherit;
+      }
+
+      @include breakpoint(1000px) {
+        min-width: 238px;
+        max-width: 238px;
+      }
     }
+
     .file-title {
       @include lg {
         max-width: 160px;
