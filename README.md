@@ -16,7 +16,7 @@ Before you begin, ensure you have the following installed on your system:
 Clone the repo:
 
 ```bash
-git clone https://gitlab.com/appetiser/appetiser-pre-hire-coding-challenge/01092025-juanito-lansangan-web.git
+git clone git@github.com:juanito-lansangan/laravel-nuxt-webtodo.git
 ```
 
 Change directory:
