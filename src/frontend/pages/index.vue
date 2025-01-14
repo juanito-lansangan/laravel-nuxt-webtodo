@@ -84,7 +84,7 @@
       </div>
     </div>
     <div class="tasks-container">
-      <div class="empty-tasks" v-if="!tasks.data">
+      <div class="empty-tasks" v-if="tasks.data.length === 0">
         <h2>No Tasks Found</h2>
         <p>You can add tasks here</p>
         <NuxtLink class="btn btn-sm" to="/tasks/create">Add New Task</NuxtLink>
