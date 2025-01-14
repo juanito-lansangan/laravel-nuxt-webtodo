@@ -2,10 +2,7 @@
 export default defineNuxtConfig({
     ssr: false,
     compatibilityDate: '2024-11-01',
-    // devtools: { enabled: true },
-    // devServer: {
-    //     host: "myapp.test"
-    // },
+    devtools: { enabled: true },
     css: [
         '~/assets/scss/main.scss',
     ],
@@ -15,12 +12,11 @@ export default defineNuxtConfig({
         '@qirolab/nuxt-sanctum-authentication'
     ],
     laravelSanctum: {
-        // apiUrl: 'http://localhost:8006', // Laravel API
-        apiUrl: 'https://api-todo.stjudeappraisal.io', // Laravel API
         // authMode: "cookie",
-        authMode: "token",
+        // authMode: "token",
+        apiUrl: process.env.NUXT_SANCTUM_API_URL || 'http://localhost:8006',
+        authMode: (process.env.NUXT_AUTH_MODE as "token" | "cookie") || "token",
         userResponseWrapperKey: "data",
-
         token: {
             storageKey: "AUTH_TOKEN",
             provider: "localStorage",
@@ -59,8 +55,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            // apiUrl: 'http://localhost:8006', // Expose to client
-            apiUrl: 'https://api-todo.stjudeappraisal.io', // Laravel API
+            apiUrl: process.env.NUXT_SANCTUM_API_URL || "http://localhost:8006", // Laravel API
         },
     },
 })
