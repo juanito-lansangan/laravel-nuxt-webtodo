@@ -307,6 +307,12 @@ const createTask = async () => {
   } catch (err) {
     if (err instanceof FetchError && err.response?.status === 422) {
       errors.value = err.response._data.errors;
+    } else {
+        notify({
+            title: "Create Task",
+            text: "Oops! there's an issue on the server.",
+            type: "error", // Optional: 'success', 'error', 'warn', etc.
+        });
     }
   }
 };
@@ -339,7 +345,7 @@ const updateTask = async () => {
       errors.value = err.response._data.errors;
     } else {
       notify({
-        title: "Delete File",
+        title: "Update Task",
         text: "Oops! there's an issue on the server.",
         type: "error", // Optional: 'success', 'error', 'warn', etc.
       });
@@ -422,8 +428,8 @@ const addNewAttachments = async () => {
     form.view_attachments = data.attachments;
 
     notify({
-      title: "Delete File",
-      text: "File successfully deleted.",
+      title: "Upload Attachments",
+      text: "Attachments successfully uploaded.",
       type: "success", // Optional: 'success', 'error', 'warn', etc.
     });
   } catch (err) {
@@ -431,7 +437,7 @@ const addNewAttachments = async () => {
       errors.value = err.response._data.errors;
     } else {
       notify({
-        title: "Delete File",
+        title: "Upload Attachments",
         text: "Oops! there's an issue on the server.",
         type: "error", // Optional: 'success', 'error', 'warn', etc.
       });
