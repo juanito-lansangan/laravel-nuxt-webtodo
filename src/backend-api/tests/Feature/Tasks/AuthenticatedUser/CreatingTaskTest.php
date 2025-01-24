@@ -94,7 +94,7 @@ test('creating a task with valid files receive 200 response with task data that 
         UploadedFile::fake()->create('sample.mp4', '1000', 'mp4'),
         UploadedFile::fake()->create(fake()->word . '.doc', 100)
     ];
-    
+
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$token}",
     ])
@@ -123,7 +123,7 @@ test('creating a task with invalid files receive 422 response with error message
         UploadedFile::fake()->create('sample.mp3', '1000', 'mp3'),
         UploadedFile::fake()->create('sample.pdf', '1000', 'pdf'),
     ];
-    
+
     $response = $this->withHeaders([
         'Authorization' => "Bearer {$token}",
     ])
@@ -157,7 +157,7 @@ test('creating task using the following requests should received 200 response', 
     ])
     ->postJson("/api/tasks", [
         "description" => "Amet adipisicing cu the quick brown fox jumps over the lazy dog",
-        "due_date" => "2025-01-16",
+        "due_date" => now()->addDay()->format('Y-m-d'),
         "priority" => "4",
         "tags" => ["erica", "sid"],
         "title" => "Sint porro et odio ",

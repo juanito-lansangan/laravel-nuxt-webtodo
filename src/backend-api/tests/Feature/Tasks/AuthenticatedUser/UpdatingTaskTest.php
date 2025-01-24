@@ -130,7 +130,7 @@ test('update task using the following requests should received 200 response', fu
     $task = Task::factory()->create();
     $user = User::factory()
     ->create();
-    
+
     $user->tasks()->save($task);
 
     $token = $user->createToken($user->email)->plainTextToken;
@@ -140,7 +140,7 @@ test('update task using the following requests should received 200 response', fu
     ])
     ->putJson("/api/tasks/{$task->id}", [
         "description" => "Amet adipisicing cu the quick brown fox jumps over the lazy dog",
-        "due_date" => "2025-01-16",
+        "due_date" => now()->addDay()->format('Y-m-d'),
         "priority" => "4",
         "tags" => ["erica", "sid"],
         "title" => "Sint porro et odio ",
