@@ -9,7 +9,7 @@ cd /root/ci-deploy
 echo "***********************************"
 echo "Stop the application"
 echo "***********************************"
-docker-compose down
+docker-compose -f deploy.docker-compose.yml down
 
 echo "***********************************"
 echo "Removing all docker images"
@@ -19,7 +19,7 @@ docker image prune -a -f
 echo "***********************************"
 echo "Start the application"
 echo "***********************************"
-docker-compose up -d
+docker-compose -f deploy.docker-compose.yml up -d
 
 echo "***********************************"
 echo "Application is now running!"
