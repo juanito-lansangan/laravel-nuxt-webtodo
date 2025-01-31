@@ -1,3 +1,5 @@
+name: laravel-nuxt-webtodo
+
 version: "3"
 services:
   db:
@@ -12,12 +14,8 @@ services:
       - ./src/backend-api/data:/var/lib/mysql
 
   api:
-    build:
-      context: .
-      dockerfile: ./docker/php.dockerfile
     container_name: todo_api
-    volumes:
-      - ./src/backend-api:/var/www/html
+    image: jplansdocker/laravel-nuxt-webtodo-api
     depends_on:
       - db
 
@@ -33,19 +31,7 @@ services:
       - api
   
   frontend:
-    build:
-      context: .
-      dockerfile: ./docker/frontend.dockerfile
+    image: jplansdocker/laravel-nuxt-webtodo-app
     container_name: todo_frontend
     ports:
       - 3000:80
-
-  # cron:
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/cron.dockerfile
-  #   container_name: todo_cron
-  #   volumes:
-  #     - ./src/backend-api:/var/www/html
-  #   depends_on:
-  #     - database

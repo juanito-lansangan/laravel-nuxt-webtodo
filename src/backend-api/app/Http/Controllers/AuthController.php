@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -19,7 +21,7 @@ class AuthController extends Controller
             'name' => ['required', 'min:3', 'max:255'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => [
-                'required', 
+                'required',
                 Password::min(8)
                     ->mixedCase()
                     ->numbers()
@@ -57,7 +59,7 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken($request->email);
-
+        Cookie::queue('user_token', Str::random(12), 360);
         return response()->json(['user' => $user, 'token' => $token->plainTextToken], 200);
     }
 

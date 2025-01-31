@@ -1,9 +1,13 @@
-FROM php:8.3-fpm-alpine
+# Stage 1: Base stage with php Alpine image
+FROM php:8.3-fpm-alpine as builder
 
 # Update app
 RUN apk update && apk add --no-cache tzdata
 # Set timezone
 # ENV TZ="Asia/Manila"
+WORKDIR /builder
+
+COPY ./src/backend-api .
 
 RUN apk add --update --no-cache autoconf g++ make openssl-dev
 RUN apk add libpng-dev
@@ -18,6 +22,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 ### End Init install
 
 RUN docker-php-ext-install pdo pdo_mysql
+RUN composer install
 
 # Install xdebug
 # RUN pecl install xdebug
