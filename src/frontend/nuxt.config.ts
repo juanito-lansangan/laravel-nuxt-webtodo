@@ -55,6 +55,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
+            appDomain: process.env.APP_DOMAIN,
             apiUrl: process.env.NUXT_SANCTUM_API_URL || "http://localhost:8006", // Laravel API
         },
     },

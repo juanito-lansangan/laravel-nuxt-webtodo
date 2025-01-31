@@ -55,7 +55,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: 'ci-deploy/docker-compose.yaml,ci-deploy/deploy.sh'
+          source: 'ci-deploy/docker-compose.yaml,ci-deploy/scripts.sh'
           target: '/root'
 
       - name: SSH and Deploy
@@ -64,4 +64,4 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: sh /root/ci-deploy/deploy.sh
+          script: sh /root/ci-deploy/scripts.sh
