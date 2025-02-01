@@ -30,9 +30,9 @@ services:
   frontend:
     image: jplansdocker/laravel-nuxt-webtodo-app
     environment:
-      - NUXT_TOKEN_STORAGE_PROVIDER=${NUXT_TOKEN_STORAGE_PROVIDER}
-      - NUXT_SANCTUM_API_URL=${NUXT_SANCTUM_API_URL}
-      - NUXT_AUTH_MODE=${NUXT_AUTH_MODE}
+      - NUXT_TOKEN_STORAGE_PROVIDER=localStorage
+      - NUXT_SANCTUM_API_URL=https://api-todo.stjudeappraisal.io
+      - NUXT_AUTH_MODE=token
     container_name: todo_frontend
     ports:
       - 3000:80
