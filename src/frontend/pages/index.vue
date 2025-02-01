@@ -107,7 +107,6 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { debounce } from "lodash";
-const token = localStorage.getItem("AUTH_TOKEN");
 
 const page = ref(1);
 const showPreloader = ref(false);

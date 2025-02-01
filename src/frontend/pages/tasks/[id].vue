@@ -10,8 +10,6 @@
 <script setup>
 const { id } = useRoute().params;
 
-const token = localStorage.getItem("AUTH_TOKEN");
-
 const { data: taskDetails } = await useAsyncData(
   `task-data-${id}`,
   async () => {

@@ -105,7 +105,7 @@ const registerUser = async () => {
       method: "post",
       body: form,
       onResponse({ request, response, options }) {
-        localStorage.setItem("AUTH_TOKEN", response._data.token);
+        // localStorage.setItem("AUTH_TOKEN", response._data.token);
       },
     });
 

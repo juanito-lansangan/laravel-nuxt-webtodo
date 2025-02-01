@@ -34,13 +34,13 @@ services:
     depends_on:
       - api
   
-  frontend:
-    build:
-      context: .
-      dockerfile: ./docker/frontend/frontend.dockerfile
-    container_name: todo_frontend
-    ports:
-      - 3000:80
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/frontend/frontend.dockerfile
+  #   container_name: todo_frontend
+  #   ports:
+  #     - 3000:80
 
   # cron:
   #   build:

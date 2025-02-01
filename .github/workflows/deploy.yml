@@ -63,8 +63,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: 'ci-deploy/docker-compose.deploy.yml,scripts/deploy.sh'
-          target: '/root'
+          source: 'ci-deploy/*'
+          target: '/root/ci-deploy/laravel-nux-webtodo'
 
       - name: SSH and Deploy
         uses: appleboy/ssh-action@v1.0.3
@@ -72,4 +72,4 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: sh /root/scripts/deploy.sh
+          script: sh /root/ci-deploy/deploy.sh
