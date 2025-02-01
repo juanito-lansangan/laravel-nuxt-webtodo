@@ -30,8 +30,16 @@ jobs:
         with:
           push: true
           context: .
-          file: ./docker/php.dockerfile
+          file: ./docker/api/php.dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-nuxt-webtodo-api:latest
+
+      - name: Build and push webserver
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          context: .
+          file: ./docker/webserver/webserver.dockerfile
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-nuxt-webtodo-server:latest
 
       - name: Build and push app
         uses: docker/build-push-action@v5

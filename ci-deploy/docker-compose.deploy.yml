@@ -9,7 +9,7 @@ services:
       MYSQL_DATABASE: todo_db
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ./src/backend-api/data:/var/lib/mysql
+      - ./data:/var/lib/mysql
 
   api:
     container_name: todo_api
@@ -18,13 +18,10 @@ services:
       - db
 
   webserver:
-    image: nginx:alpine
+    image: laravel-nuxt-webtodo-server
     container_name: todo_webserver
     ports:
       - 8006:80
-    volumes:
-      - .:/var/www/html
-      - ./docker/config/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - api
   

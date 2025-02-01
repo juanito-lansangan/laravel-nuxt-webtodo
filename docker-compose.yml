@@ -9,33 +9,35 @@ services:
       MYSQL_DATABASE: todo_db
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ./src/backend-api/data:/var/lib/mysql
+      - ./data:/var/lib/mysql
 
   api:
     build:
       context: .
-      dockerfile: ./docker/php.dockerfile
+      dockerfile: ./docker/api/php.dockerfile
     container_name: todo_api
     volumes:
-      - ./src/backend-api:/var/www/html
+      - ./src/api:/var/www/html
     depends_on:
       - db
 
   webserver:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: ./docker/webserver/webserver.dockerfile
     container_name: todo_webserver
     ports:
       - 8006:80
     volumes:
-      - .:/var/www/html
-      - ./docker/config/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./src/api:/var/www/html
+      - ./docker/webserver/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - api
   
   frontend:
     build:
       context: .
-      dockerfile: ./docker/frontend.dockerfile
+      dockerfile: ./docker/frontend/frontend.dockerfile
     container_name: todo_frontend
     ports:
       - 3000:80
@@ -46,6 +48,6 @@ services:
   #     dockerfile: ./docker/cron.dockerfile
   #   container_name: todo_cron
   #   volumes:
-  #     - ./src/backend-api:/var/www/html
+  #     - ./src/api:/var/www/html
   #   depends_on:
   #     - database

@@ -28,7 +28,7 @@ cd laravel-nuxt-webtodo
 Copy Laravel `.env` file:
 
 ```bash
-cp src/backend-api/.env.example src/backend-api/.env
+cp src/api/.env.example src/api/.env
 ```
 
 Build the Docker images:
