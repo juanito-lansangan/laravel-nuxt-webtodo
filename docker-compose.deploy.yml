@@ -14,6 +14,8 @@ services:
   api:
     container_name: todo_api
     image: jplansdocker/laravel-nuxt-webtodo-api
+    volumes:
+      - ./env/api/.env
     depends_on:
       - db
 
@@ -28,5 +30,7 @@ services:
   frontend:
     image: jplansdocker/laravel-nuxt-webtodo-app
     container_name: todo_frontend
+    volumes:
+      - ./env/frontend/.env
     ports:
       - 3000:80
