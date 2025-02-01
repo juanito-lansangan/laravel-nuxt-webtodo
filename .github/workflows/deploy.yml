@@ -46,7 +46,7 @@ jobs:
         with:
           push: true
           context: .
-          file: ./docker/frontend.dockerfile
+          file: ./docker/frontend/frontend.dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-nuxt-webtodo-app:latest
 
   deploy:
