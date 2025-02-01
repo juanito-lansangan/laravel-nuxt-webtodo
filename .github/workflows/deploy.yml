@@ -48,6 +48,10 @@ jobs:
           context: .
           file: ./docker/frontend/frontend.dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-nuxt-webtodo-app:latest
+          build-args:
+            NUXT_TOKEN_STORAGE_PROVIDER: ${{ secrets.NUXT_TOKEN_STORAGE_PROVIDER }}
+            NUXT_SANCTUM_API_URL: ${{ secrets.NUXT_SANCTUM_API_URL }}
+            NUXT_AUTH_MODE: ${{ secrets.NUXT_AUTH_MODE }}
 
   deploy:
     needs: [build-and-push]

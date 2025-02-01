@@ -15,7 +15,7 @@ services:
     container_name: todo_api
     image: jplansdocker/laravel-nuxt-webtodo-api
     volumes:
-      - ./env/api/.env
+      - ./env/api/.env:/var/www/html/.env
     depends_on:
       - db
 
@@ -29,8 +29,10 @@ services:
   
   frontend:
     image: jplansdocker/laravel-nuxt-webtodo-app
+    environment:
+      - NUXT_TOKEN_STORAGE_PROVIDER=${NUXT_TOKEN_STORAGE_PROVIDER}
+      - NUXT_SANCTUM_API_URL=${NUXT_SANCTUM_API_URL}
+      - NUXT_AUTH_MODE=${NUXT_AUTH_MODE}
     container_name: todo_frontend
-    volumes:
-      - ./env/frontend/.env
     ports:
       - 3000:80
