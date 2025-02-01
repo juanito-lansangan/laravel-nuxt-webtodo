@@ -4,7 +4,7 @@ sudo -i bash <<EOF
 echo "***********************************"
 echo "Navigate to the docker folder"
 echo "***********************************"
-cd /root/ci-deploy
+cd /root/webapps/laravel-nuxt-webtodo
 
 echo "***********************************"
 echo "Stop the application"
