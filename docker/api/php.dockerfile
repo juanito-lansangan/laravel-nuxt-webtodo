@@ -1,45 +1,44 @@
+# Use official PHP image with FPM
 FROM php:8.3-fpm
 
-# Arguments defined in docker-compose.yml
-# ARG uid=1000
-# ARG user=laravel
+# Set working directory
+WORKDIR /var/www/html
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install system dependencies in a single layer and clean up
+RUN apt-get update --no-install-recommends -y && \
+    apt-get install -y \
     git \
     curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip && \
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install xdebug (if needed, uncomment)
+# RUN pecl install xdebug && docker-php-ext-enable xdebug
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Install xdebug
-# RUN pecl install xdebug
-
+# Copy project files
 COPY ./src/api .
 
-# Copy config files
-# COPY ./config/90-xdebug.ini "${PHP_INI_DIR}"/conf.d
+# Copy PHP custom configuration
 COPY ./docker/api/custom.ini "${PHP_INI_DIR}"/conf.d
 
-# Get latest Composer
+# Get the latest Composer and optimize installation
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create system user to run Composer and Artisan Commands
-# RUN useradd -G www-data,root -u $uid -d /home/$user $user
-# RUN mkdir -p /home/$user/.composer && \
-#     chown -R $user:$user /home/$user
+# Install dependencies with optimized Composer flags for performance
+RUN composer install --prefer-dist --no-dev --optimize-autoloader
 
-RUN composer install
+# Ensure proper permissions for storage and cache directories
+RUN chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
 
-# Set working directory
-# WORKDIR /var/www/html
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
 
-# USER $user
+# Command to run PHP-FPM
+CMD ["php-fpm"]
