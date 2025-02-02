@@ -39,7 +39,7 @@ jobs:
           sleep 20
 
           # Install Composer dependencies inside the API container
-          # docker-compose exec api composer install --no-interaction --prefer-dist
+          docker-compose exec api composer install --no-interaction --prefer-dist
 
           # Run the Laravel tests within the API container
           docker-compose exec api php artisan test
