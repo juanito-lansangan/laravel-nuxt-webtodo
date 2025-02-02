@@ -1,4 +1,4 @@
-name: Deploy
+name: Dev Server Deploy
 
 on:
   push:
@@ -27,14 +27,13 @@ jobs:
       - name: Run Laravel API Tests with Docker Compose
         run: |
           # Set up Docker Compose with necessary volumes
-          docker-compose -f docker-compose.yml up -d db api
+          docker-compose up -d
           
           # Wait for the DB container to be fully ready (optional)
           # Adjust if needed based on your DB initialization times
           sleep 15
 
           # Run the Laravel tests within the API container
-          docker-compose exec api php artisan migrate --force
           docker-compose exec api php artisan test
 
           # Tear down the containers
