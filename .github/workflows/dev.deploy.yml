@@ -28,16 +28,24 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      # Copy .env.example to .env file for the container
+      - name: Copy .env.example to .env
+        run: |
+          cp .env.example .env
 
       # Run Automated Tests for Laravel API (via docker-compose)
       - name: Run Laravel API Tests with Docker Compose
         run: |
           # Set up Docker Compose with necessary volumes
-          docker-compose up -d
+          docker-compose up -d db api
           
           # Wait for the DB container to be fully ready (optional)
           # Adjust if needed based on your DB initialization times
           sleep 15
+
+          # Install Composer dependencies inside the API container
+          docker-compose exec api composer install --no-interaction --prefer-dist
 
           # Run the Laravel tests within the API container
           docker-compose exec api php artisan test
